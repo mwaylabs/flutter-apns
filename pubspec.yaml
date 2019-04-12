@@ -1,0 +1,23 @@
+name: flutter_apns
+description: APNS push notification plugin.
+version: 1.0.0
+author:  M-Way Solutions info@mwaysolutions.com
+homepage: https://github.com/mwaylabs/flutter-apns
+
+environment:
+  sdk: ">=2.1.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  firebase_messaging: ^4.0.0+3
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  plugin:
+    androidPackage: com.mwaysolutions.flutter.apns
+    pluginClass: FlutterApnsPlugin
+

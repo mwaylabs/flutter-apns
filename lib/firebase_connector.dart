@@ -1,0 +1,34 @@
+import 'package:flutter_apns/connector.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
+
+class FirebasePushConnector extends PushConnector {
+  final _firebase = FirebaseMessaging();
+
+  @override
+  final isDisabledByUser = ValueNotifier(false);
+
+  @override
+  void configure({onMessage, onLaunch, onResume}) {
+    _firebase.configure(
+      onMessage: onMessage,
+      onLaunch: onLaunch,
+      onResume: onResume,
+    );
+
+    _firebase.onTokenRefresh.listen((value) {
+      token.value = value;
+    });
+  }
+
+  @override
+  final token = ValueNotifier(null);
+
+  @override
+  void requestNotificationPermissions() {
+    _firebase.requestNotificationPermissions();
+  }
+
+  @override
+  String get providerType => 'GCM';
+}
