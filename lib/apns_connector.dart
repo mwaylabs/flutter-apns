@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter_apns/connector.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/services.dart';
+import 'package:flutter/services.dart' hide MessageHandler;
 export 'package:flutter_apns/connector.dart';
 
 class ApnsPushConnector extends PushConnector {
