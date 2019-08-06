@@ -1,9 +1,37 @@
 #import "FlutterApnsPlugin.h"
+#import <objc/runtime.h>
+#import "FirebaseMessagingPlugin.h"
+
+static void swizzle(Class c, SEL orig, SEL new) {
+    Method origMethod = class_getClassMethod(c, orig);
+    Method newMethod = class_getClassMethod(c, new);
+    
+    c = object_getClass((id)c);
+    
+    if(class_addMethod(c, orig, method_getImplementation(newMethod), method_getTypeEncoding(newMethod)))
+        class_replaceMethod(c, new, method_getImplementation(origMethod), method_getTypeEncoding(origMethod));
+    else
+        method_exchangeImplementations(origMethod, newMethod);
+}
+
+@interface FLTFirebaseMessagingPlugin (Ignore)
+@end
+
+@implementation FLTFirebaseMessagingPlugin (Ignore)
++ (void)apns_registerWithRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
+    // disabling FLTFirebaseMessagingPlugin
+}
+@end
+
 
 @implementation FlutterApnsPlugin {
     FlutterMethodChannel *_channel;
     NSDictionary *_launchNotification;
     BOOL _resumingFromBackground;
+}
+
++ (void)load {
+    swizzle([FLTFirebaseMessagingPlugin self], @selector(registerWithRegistrar:), @selector(apns_registerWithRegistrar:));
 }
 
 + (void)registerWithRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
