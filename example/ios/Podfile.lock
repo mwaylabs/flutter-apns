@@ -99,7 +99,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Firebase: dedc9e48ea3f3649ad5f6b982f8a0c73508a14b5
-  firebase_messaging: b25b2fa94e685146bcf9d706ed87b4e95cd2a17d
+  firebase_messaging: efa1c09df5b6fbf505ee319bf27a0c88efe9ff8c
   FirebaseAnalytics: 3fb375bc9d13779add4039716f868d233a473fad
   FirebaseAnalyticsInterop: efbe45c8385ec626e29f9525e5ebd38520dfb6c1
   FirebaseCore: aecf02fb2274ec361b9bebeac112f5daa18273bd
@@ -114,4 +114,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 7fb83752f59ead6285236625b82473f90b1cb932
 
-COCOAPODS: 1.7.1
+COCOAPODS: 1.7.5
