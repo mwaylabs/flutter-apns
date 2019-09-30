@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 
-typedef MessageHandler = Future<void> Function(Map<String, dynamic>);
+typedef Future<dynamic> MessageHandler(Map<String, dynamic> message);
 
 abstract class PushConnector {
   ValueNotifier<bool> get isDisabledByUser;
@@ -8,10 +8,12 @@ abstract class PushConnector {
   String get providerType;
 
   /// Run this at app start to connect methods correctly.
-  void configure(
-      {MessageHandler onMessage,
-      MessageHandler onLaunch,
-      MessageHandler onResume});
+  void configure({
+    MessageHandler onMessage,
+    MessageHandler onLaunch,
+    MessageHandler onResume,
+    MessageHandler onBackgroundMessage,
+  });
 
   void requestNotificationPermissions();
 

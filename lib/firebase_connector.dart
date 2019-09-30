@@ -9,11 +9,12 @@ class FirebasePushConnector extends PushConnector {
   final isDisabledByUser = ValueNotifier(false);
 
   @override
-  void configure({onMessage, onLaunch, onResume}) {
+  void configure({onMessage, onLaunch, onResume, onBackgroundMessage}) {
     _firebase.configure(
       onMessage: onMessage,
       onLaunch: onLaunch,
       onResume: onResume,
+      onBackgroundMessage: onBackgroundMessage,
     );
 
     _firebase.onTokenRefresh.listen((value) {

@@ -31,6 +31,7 @@ class ApnsPushConnector extends PushConnector {
     MessageHandler onMessage,
     MessageHandler onLaunch,
     MessageHandler onResume,
+    MessageHandler onBackgroundMessage,
   }) {
     _onMessage = onMessage;
     _onLaunch = onLaunch;

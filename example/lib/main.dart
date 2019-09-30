@@ -1,7 +1,13 @@
 import 'package:flutter_apns/apns.dart';
 import 'package:flutter/material.dart';
 
-void main() => runApp(MyApp());
+import 'storage.dart';
+
+Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await storage.setup();
+  runApp(MyApp());
+}
 
 class MyApp extends StatefulWidget {
   @override
@@ -10,6 +16,7 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   final connector = createPushConnector();
+
   @override
   void initState() {
     super.initState();
@@ -18,12 +25,12 @@ class _MyAppState extends State<MyApp> {
       onLaunch: onPush,
       onResume: onPush,
       onMessage: onPush,
+      onBackgroundMessage: onBackgroundPush,
     );
+    connector.token.addListener(() {
+      print('Token ${connector.token.value}');
+    });
     connector.requestNotificationPermissions();
-  }
-
-  Future<void> onPush(Map<String, dynamic> data) {
-    return Future.value();
   }
 
   @override
@@ -33,7 +40,23 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
+        body: AnimatedBuilder(
+          animation: storage,
+          builder: (contexxt, _) {
+            return Text(storage.content);
+          },
+        ),
       ),
     );
   }
+}
+
+Future<dynamic> onPush(Map<String, dynamic> data) {
+  storage.append('onPush: $data');
+  return Future.value();
+}
+
+Future<dynamic> onBackgroundPush(Map<String, dynamic> data) async {
+  storage.append('onBackgroundPush: $data');
+  return Future.value();
 }
