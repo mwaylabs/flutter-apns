@@ -89,6 +89,17 @@
     }
 }
 
+- (NSString *)stringWithDeviceToken:(NSData *)deviceToken {
+    const char *data = [deviceToken bytes];
+    NSMutableString *token = [NSMutableString string];
+
+    for (NSUInteger i = 0; i < [deviceToken length]; i++) {
+        [token appendFormat:@"%02.2hhX", data[i]];
+    }
+
+    return [token copy];
+}
+
 #pragma mark - AppDelegate
 
 - (BOOL)application:(UIApplication *)application
@@ -132,10 +143,7 @@ fetchCompletionHandler:(void (^)(UIBackgroundFetchResult result))completionHandl
 
 - (void)application:(UIApplication *)application
 didRegisterForRemoteNotificationsWithDeviceToken:(NSData *)deviceToken {
-    NSString * token = [[[[deviceToken description]
-                          stringByReplacingOccurrencesOfString: @"<" withString: @""]
-                         stringByReplacingOccurrencesOfString: @">" withString: @""]
-                        stringByReplacingOccurrencesOfString: @" " withString: @""];
+    NSString * token = [self stringWithDeviceToken:deviceToken];
     [_channel invokeMethod:@"onToken" arguments:token];
 }
 
