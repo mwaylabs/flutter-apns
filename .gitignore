@@ -5,5 +5,5 @@
 .pub/
 
 build/
-google-services.json
 flutter_export_environment.sh
+.flutter-plugins-dependencies

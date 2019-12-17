@@ -75,7 +75,7 @@ PODS:
 
 DEPENDENCIES:
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
-  - Flutter (from `.symlinks/flutter/ios`)
+  - Flutter (from `Flutter`)
   - flutter_apns (from `.symlinks/plugins/flutter_apns/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
 
@@ -96,7 +96,7 @@ EXTERNAL SOURCES:
   firebase_messaging:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
-    :path: ".symlinks/flutter/ios"
+    :path: Flutter
   flutter_apns:
     :path: ".symlinks/plugins/flutter_apns/ios"
   path_provider:
@@ -104,7 +104,7 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Firebase: dedc9e48ea3f3649ad5f6b982f8a0c73508a14b5
-  firebase_messaging: acdcd2edbe7270bae6c3a93cf6c60e86538b3064
+  firebase_messaging: b8543d17dd9825f4f24a585477f77db103e5228e
   FirebaseAnalytics: 3fb375bc9d13779add4039716f868d233a473fad
   FirebaseAnalyticsInterop: efbe45c8385ec626e29f9525e5ebd38520dfb6c1
   FirebaseCore: aecf02fb2274ec361b9bebeac112f5daa18273bd
@@ -118,6 +118,6 @@ SPEC CHECKSUMS:
   path_provider: f96fff6166a8867510d2c25fdcc346327cc4b259
   Protobuf: 1097ca58584c8d9be81bfbf2c5ff5975648dd87a
 
-PODFILE CHECKSUM: 7fb83752f59ead6285236625b82473f90b1cb932
+PODFILE CHECKSUM: 3dbe063e9c90a5d7c9e4e76e70a821b9e2c1d271
 
 COCOAPODS: 1.8.4
