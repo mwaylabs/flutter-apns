@@ -26,7 +26,7 @@ connector.requestNotificationPermissions()
 
 ## Troubleshooting
 
-1. Ensure that you are on actual devices. NOTE: this may not be needed from 11.4: https://ohmyswift.com/blog/2020/02/13/simulating-remote-push-notifications-in-a-simulator/
+1. Ensure that you are testing on actual device. NOTE: this may not be needed from 11.4: https://ohmyswift.com/blog/2020/02/13/simulating-remote-push-notifications-in-a-simulator/
 2. If onToken method is not being called, add error logging to your AppDelegate, for example:
 
 *swift*
