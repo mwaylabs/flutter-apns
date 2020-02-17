@@ -48,6 +48,7 @@ class ApnsPushConnector extends PushConnector {
       case 'onIosSettingsRegistered':
         final obj = IosNotificationSettings._fromMap(
             call.arguments.cast<String, bool>());
+
         isDisabledByUser.value = obj?.alert == false;
         return null;
       case 'onMessage':
@@ -62,7 +63,7 @@ class ApnsPushConnector extends PushConnector {
   }
 
   @override
-  final isDisabledByUser = ValueNotifier(false);
+  final isDisabledByUser = ValueNotifier(null);
 
   @override
   final token = ValueNotifier<String>(null);
