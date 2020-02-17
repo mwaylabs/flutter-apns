@@ -10,4 +10,8 @@
   return [super application:application didFinishLaunchingWithOptions:launchOptions];
 }
 
+-(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"%@", error);
+}
+
 @end

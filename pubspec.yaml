@@ -9,7 +9,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_messaging: ^5.1.8
+  firebase_messaging: ^6.0.9
 
 dev_dependencies:
   flutter_test:

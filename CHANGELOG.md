@@ -1,4 +1,8 @@
 
+### 1.1.0
+* merged https://github.com/mwaylabs/flutter-apns/pull/11 - make sure that you are handling isDisabledByUser == null
+* upgraded firebase to 6.0.9
+
 ### 1.0.5
 * fixed https://github.com/mwaylabs/flutter-apns/issues/9
 

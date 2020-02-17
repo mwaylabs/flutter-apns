@@ -23,3 +23,52 @@ connector.configure(
 connector.requestNotificationPermissions()
 ```
 5. Build on device and test your solution using Firebase Console and NWPusher app.
+
+## Troubleshooting
+
+1. Ensure that you are on actual devices. NOTE: this may not be needed from 11.4: https://ohmyswift.com/blog/2020/02/13/simulating-remote-push-notifications-in-a-simulator/
+2. If onToken method is not being called, add error logging to your AppDelegate, for example:
+
+*swift*
+```swift
+import UIKit
+import Flutter
+
+@UIApplicationMain
+@objc class AppDelegate: FlutterAppDelegate {
+  override func application(
+    _ application: UIApplication,
+    didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
+  ) -> Bool {
+    GeneratedPluginRegistrant.register(with: self)
+    return super.application(application, didFinishLaunchingWithOptions: launchOptions)
+  }
+
+  func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+     NSLog("PUSH registration failed: \(error)")
+    findDependency(\.userData).newPushToken = .waitingForUpload(nil)
+  }
+}
+
+```
+
+*objc*
+```objc
+#include "AppDelegate.h"
+#include "GeneratedPluginRegistrant.h"
+
+@implementation AppDelegate
+
+- (BOOL)application:(UIApplication *)application
+    didFinishLaunchingWithOptions:(NSDictionary *)launchOptions {
+  [GeneratedPluginRegistrant registerWithRegistry:self];
+  // Override point for customization after application launch.
+  return [super application:application didFinishLaunchingWithOptions:launchOptions];
+}
+
+-(void)application:(UIApplication *)application didFailToRegisterForRemoteNotificationsWithError:(NSError *)error {
+    NSLog(@"%@", error);
+}
+
+@end
+```
