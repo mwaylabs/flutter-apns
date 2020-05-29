@@ -46,7 +46,6 @@ import Flutter
 
   func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
      NSLog("PUSH registration failed: \(error)")
-    findDependency(\.userData).newPushToken = .waitingForUpload(nil)
   }
 }
 
