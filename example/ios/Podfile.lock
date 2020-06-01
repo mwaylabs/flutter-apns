@@ -40,6 +40,8 @@ PODS:
   - Flutter (1.0.0)
   - flutter_apns (0.0.1):
     - Flutter
+  - flutter_local_notifications (0.0.1):
+    - Flutter
   - GoogleAppMeasurement (6.0.4):
     - GoogleUtilities/AppDelegateSwizzler (~> 6.0)
     - GoogleUtilities/MethodSwizzler (~> 6.0)
@@ -77,10 +79,11 @@ DEPENDENCIES:
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
   - flutter_apns (from `.symlinks/plugins/flutter_apns/ios`)
+  - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
 
 SPEC REPOS:
-  https://github.com/CocoaPods/Specs.git:
+  trunk:
     - Firebase
     - FirebaseAnalytics
     - FirebaseAnalyticsInterop
@@ -99,12 +102,14 @@ EXTERNAL SOURCES:
     :path: Flutter
   flutter_apns:
     :path: ".symlinks/plugins/flutter_apns/ios"
+  flutter_local_notifications:
+    :path: ".symlinks/plugins/flutter_local_notifications/ios"
   path_provider:
     :path: ".symlinks/plugins/path_provider/ios"
 
 SPEC CHECKSUMS:
   Firebase: dedc9e48ea3f3649ad5f6b982f8a0c73508a14b5
-  firebase_messaging: 73b3e7dd7b3b6a7e4bdac10d5295211ca4f87f90
+  firebase_messaging: 21344b3b3a7d9d325d63a70e3750c0c798fe1e03
   FirebaseAnalytics: 3fb375bc9d13779add4039716f868d233a473fad
   FirebaseAnalyticsInterop: efbe45c8385ec626e29f9525e5ebd38520dfb6c1
   FirebaseCore: aecf02fb2274ec361b9bebeac112f5daa18273bd
@@ -112,6 +117,7 @@ SPEC CHECKSUMS:
   FirebaseMessaging: 6bb0bdaf64c55fef7a219b7bb1e94e94a0855ced
   Flutter: 0e3d915762c693b495b44d77113d4970485de6ec
   flutter_apns: f516b118e423fe7c0a38771180549c4d6cb67c2f
+  flutter_local_notifications: 9e4738ce2471c5af910d961a6b7eadcf57c50186
   GoogleAppMeasurement: 183bd916af7f80deb67c01888368f1108d641832
   GoogleUtilities: d2b0e277a95962e09bb27f5cd42f5f0b6a506c7d
   nanopb: 2901f78ea1b7b4015c860c2fdd1ea2fee1a18d48
@@ -120,4 +126,4 @@ SPEC CHECKSUMS:
 
 PODFILE CHECKSUM: 3dbe063e9c90a5d7c9e4e76e70a821b9e2c1d271
 
-COCOAPODS: 1.8.4
+COCOAPODS: 1.9.1

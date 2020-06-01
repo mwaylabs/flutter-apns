@@ -1,4 +1,8 @@
 
+### 1.2.0
+* upgraded firebase to 6.0.16
+  IMPORTANT! New version requires setting UNUserNotificationCenterDelegate. Check the readme.
+
 ### 1.1.0
 * merged https://github.com/mwaylabs/flutter-apns/pull/11 - make sure that you are handling isDisabledByUser == null
 * upgraded firebase to 6.0.9

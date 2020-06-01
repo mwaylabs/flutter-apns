@@ -1,5 +1,16 @@
 #import "FlutterApnsPlugin.h"
 #import <objc/runtime.h>
+#import <UserNotifications/UserNotifications.h>
+
+static FlutterError *getFlutterError(NSError *error) {
+  if (error == nil) return nil;
+  return [FlutterError errorWithCode:[NSString stringWithFormat:@"Error %ld", (long)error.code]
+                             message:error.domain
+                             details:error.localizedDescription];
+}
+
+@interface FlutterApnsPlugin () <UNUserNotificationCenterDelegate>
+@end
 
 @implementation FlutterApnsPlugin {
     FlutterMethodChannel *_channel;
@@ -54,22 +65,88 @@
 - (void)handleMethodCall:(FlutterMethodCall *)call result:(FlutterResult)result {
     NSString *method = call.method;
     if ([@"requestNotificationPermissions" isEqualToString:method]) {
-        UIUserNotificationType notificationTypes = 0;
         NSDictionary *arguments = call.arguments;
-        if ([arguments[@"sound"] boolValue]) {
-            notificationTypes |= UIUserNotificationTypeSound;
-        }
-        if ([arguments[@"alert"] boolValue]) {
-            notificationTypes |= UIUserNotificationTypeAlert;
-        }
-        if ([arguments[@"badge"] boolValue]) {
-            notificationTypes |= UIUserNotificationTypeBadge;
-        }
-        UIUserNotificationSettings *settings =
-        [UIUserNotificationSettings settingsForTypes:notificationTypes categories:nil];
-        [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
-        
-        result(nil);
+           if (@available(iOS 10.0, *)) {
+#if DEBUG
+               if ([UNUserNotificationCenter currentNotificationCenter].delegate == nil) {
+                   result([FlutterError errorWithCode:@"flutter_apns_delegate"
+                                              message:@"UNUserNotificationCenterDelegate is not set. Check README of flutter_apns. This is debug only error."
+                                              details:nil]);
+                   return;
+               }
+#endif
+
+               
+             UNAuthorizationOptions authOptions = 0;
+             NSNumber *provisional = arguments[@"provisional"];
+             if ([arguments[@"sound"] boolValue]) {
+               authOptions |= UNAuthorizationOptionSound;
+             }
+             if ([arguments[@"alert"] boolValue]) {
+               authOptions |= UNAuthorizationOptionAlert;
+             }
+             if ([arguments[@"badge"] boolValue]) {
+               authOptions |= UNAuthorizationOptionBadge;
+             }
+
+             NSNumber *isAtLeastVersion12;
+             if (@available(iOS 12, *)) {
+               isAtLeastVersion12 = [NSNumber numberWithBool:YES];
+               if ([provisional boolValue]) authOptions |= UNAuthorizationOptionProvisional;
+             } else {
+               isAtLeastVersion12 = [NSNumber numberWithBool:NO];
+             }
+
+             [[UNUserNotificationCenter currentNotificationCenter]
+                 requestAuthorizationWithOptions:authOptions
+                               completionHandler:^(BOOL granted, NSError *_Nullable error) {
+                                 if (error) {
+                                   result(getFlutterError(error));
+                                   return;
+                                 }
+                                 // This works for iOS >= 10. See
+                                 // [UIApplication:didRegisterUserNotificationSettings:notificationSettings]
+                                 // for ios < 10.
+                                 [[UNUserNotificationCenter currentNotificationCenter]
+                                     getNotificationSettingsWithCompletionHandler:^(
+                                         UNNotificationSettings *_Nonnull settings) {
+                                       NSDictionary *settingsDictionary = @{
+                                         @"sound" : [NSNumber numberWithBool:settings.soundSetting ==
+                                                                             UNNotificationSettingEnabled],
+                                         @"badge" : [NSNumber numberWithBool:settings.badgeSetting ==
+                                                                             UNNotificationSettingEnabled],
+                                         @"alert" : [NSNumber numberWithBool:settings.alertSetting ==
+                                                                             UNNotificationSettingEnabled],
+                                         @"provisional" :
+                                             [NSNumber numberWithBool:granted && [provisional boolValue] &&
+                                                                      isAtLeastVersion12],
+                                       };
+                                       [self->_channel invokeMethod:@"onIosSettingsRegistered"
+                                                          arguments:settingsDictionary];
+                                     }];
+                                 result([NSNumber numberWithBool:granted]);
+                               }];
+
+             [[UIApplication sharedApplication] registerForRemoteNotifications];
+           } else {
+             UIUserNotificationType notificationTypes = 0;
+             if ([arguments[@"sound"] boolValue]) {
+               notificationTypes |= UIUserNotificationTypeSound;
+             }
+             if ([arguments[@"alert"] boolValue]) {
+               notificationTypes |= UIUserNotificationTypeAlert;
+             }
+             if ([arguments[@"badge"] boolValue]) {
+               notificationTypes |= UIUserNotificationTypeBadge;
+             }
+
+             UIUserNotificationSettings *settings =
+                 [UIUserNotificationSettings settingsForTypes:notificationTypes categories:nil];
+             [[UIApplication sharedApplication] registerUserNotificationSettings:settings];
+
+             [[UIApplication sharedApplication] registerForRemoteNotifications];
+             result([NSNumber numberWithBool:YES]);
+           }
     } else if ([@"configure" isEqualToString:method]) {
         [[UIApplication sharedApplication] registerForRemoteNotifications];
         if (_launchNotification != nil) {
@@ -156,5 +233,35 @@ didRegisterUserNotificationSettings:(UIUserNotificationSettings *)notificationSe
                                          };
     [_channel invokeMethod:@"onIosSettingsRegistered" arguments:settingsDictionary];
 }
+
+#if defined(__IPHONE_10_0) && __IPHONE_OS_VERSION_MAX_ALLOWED >= __IPHONE_10_0
+
+// Received data message on iOS 10 devices while app is in the foreground.
+// Only invoked if method swizzling is disabled and UNUserNotificationCenterDelegate has been
+// registered in AppDelegate
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+       willPresentNotification:(UNNotification *)notification
+         withCompletionHandler:(void (^)(UNNotificationPresentationOptions))completionHandler
+    NS_AVAILABLE_IOS(10.0) {
+  NSDictionary *userInfo = notification.request.content.userInfo;
+  // Check to key to ensure we only handle messages from aps
+  if (userInfo[@"aps"]) {
+    [_channel invokeMethod:@"onMessage" arguments:userInfo];
+    completionHandler(UNNotificationPresentationOptionNone);
+  }
+}
+
+- (void)userNotificationCenter:(UNUserNotificationCenter *)center
+    didReceiveNotificationResponse:(UNNotificationResponse *)response
+             withCompletionHandler:(void (^)(void))completionHandler NS_AVAILABLE_IOS(10.0) {
+  NSDictionary *userInfo = response.notification.request.content.userInfo;
+  // Check to key to ensure we only handle messages from aps
+  if (userInfo[@"aps"]) {
+    [_channel invokeMethod:@"onResume" arguments:userInfo];
+    completionHandler();
+  }
+}
+
+#endif
 
 @end
