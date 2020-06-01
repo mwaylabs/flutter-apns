@@ -25,7 +25,7 @@ class _MyAppState extends State<MyApp> {
       onLaunch: (data) => onPush('onLaunch', data),
       onResume: (data) => onPush('onResume', data),
       onMessage: (data) => onPush('onMessage', data),
-      onBackgroundMessage: (data) => onPush('onBackgroundMessage', data),
+      onBackgroundMessage: _onBackgroundMessage,
     );
     connector.token.addListener(() {
       print('Token ${connector.token.value}');
@@ -55,3 +55,6 @@ Future<dynamic> onPush(String name, Map<String, dynamic> data) {
   storage.append('$name: $data');
   return Future.value();
 }
+
+Future<dynamic> _onBackgroundMessage(Map<String, dynamic> data) =>
+    onPush('onBackgroundMessage', data);
