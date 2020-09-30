@@ -1,3 +1,5 @@
+### 1.3.0
+* upgraded firebase to 7.0.0
 
 ### 1.2.0
 * upgraded firebase to 6.0.16

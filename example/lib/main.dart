@@ -40,11 +40,24 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: AnimatedBuilder(
-          animation: storage,
-          builder: (contexxt, _) {
-            return Text(storage.content);
-          },
+        body: Column(
+          children: [
+            Text('Token:'),
+            ValueListenableBuilder(
+              valueListenable: connector.token,
+              builder: (context, data, __) {
+                return SelectableText('$data');
+              },
+            ),
+            Expanded(
+              child: AnimatedBuilder(
+                animation: storage,
+                builder: (context, _) {
+                  return Text(storage.content);
+                },
+              ),
+            ),
+          ],
         ),
       ),
     );
