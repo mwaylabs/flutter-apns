@@ -1,4 +1,4 @@
-import 'package:flutter_apns/apns.dart';
+import 'package:flutter_apns/flutter_apns.dart';
 import 'package:flutter/material.dart';
 
 import 'storage.dart';
@@ -15,7 +15,7 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  final connector = createPushConnector();
+  final PushConnector connector = createPushConnector();
 
   @override
   void initState() {

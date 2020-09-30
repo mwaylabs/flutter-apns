@@ -1,3 +1,6 @@
+### 1.3.1
+* documentation & project structure cleanup
+
 ### 1.3.0
 * upgraded firebase to 7.0.0
 

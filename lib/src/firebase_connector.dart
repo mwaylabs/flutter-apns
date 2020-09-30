@@ -1,4 +1,4 @@
-import 'package:flutter_apns/connector.dart';
+import 'package:flutter_apns/src/connector.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 
