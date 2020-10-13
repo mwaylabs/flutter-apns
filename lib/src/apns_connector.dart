@@ -57,6 +57,7 @@ class ApnsPushConnector extends PushConnector {
         return _onLaunch(call.arguments.cast<String, dynamic>());
       case 'onResume':
         return _onResume(call.arguments.cast<String, dynamic>());
+
       default:
         throw UnsupportedError('Unrecognized JSON message');
     }
@@ -75,6 +76,12 @@ class ApnsPushConnector extends PushConnector {
   void dispose() {
     _iosSettingsStreamController.close();
     super.dispose();
+  }
+
+  @override
+  Future<void> unregister() async {
+    await _channel.invokeMethod('unregister');
+    token.value = null;
   }
 }
 

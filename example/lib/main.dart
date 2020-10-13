@@ -17,10 +17,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final PushConnector connector = createPushConnector();
 
-  @override
-  void initState() {
-    super.initState();
-
+  void _register() {
     connector.configure(
       onLaunch: (data) => onPush('onLaunch', data),
       onResume: (data) => onPush('onResume', data),
@@ -34,30 +31,45 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
+  void initState() {
+    _register();
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
           title: const Text('Plugin example app'),
         ),
-        body: Column(
-          children: [
-            Text('Token:'),
-            ValueListenableBuilder(
-              valueListenable: connector.token,
-              builder: (context, data, __) {
-                return SelectableText('$data');
-              },
-            ),
-            Expanded(
-              child: AnimatedBuilder(
+        body: Center(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text('Token:'),
+              ValueListenableBuilder(
+                valueListenable: connector.token,
+                builder: (context, data, __) {
+                  return SelectableText('$data');
+                },
+              ),
+              FlatButton(
+                child: Text('Register'),
+                onPressed: _register,
+              ),
+              FlatButton(
+                child: Text('Unregister'),
+                onPressed: connector.unregister,
+              ),
+              AnimatedBuilder(
                 animation: storage,
                 builder: (context, _) {
                   return Text(storage.content);
                 },
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
@@ -66,7 +78,7 @@ class _MyAppState extends State<MyApp> {
 
 Future<dynamic> onPush(String name, Map<String, dynamic> data) {
   storage.append('$name: $data');
-  return Future.value();
+  return Future.value(true);
 }
 
 Future<dynamic> _onBackgroundMessage(Map<String, dynamic> data) =>

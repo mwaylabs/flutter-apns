@@ -18,6 +18,7 @@ abstract class PushConnector {
 
   /// Configures callbacks for supported message situations.
   void configure({
+    /// iOS only: return true to display notification while app is in foreground
     MessageHandler onMessage,
     MessageHandler onLaunch,
     MessageHandler onResume,
@@ -28,6 +29,9 @@ abstract class PushConnector {
   /// After user makes their choice, isDisabledByUser will become either true or false.
   /// If accepted, token.value will be set
   void requestNotificationPermissions();
+
+  /// Unregisters from the service and clears the token.
+  Future<void> unregister();
 
   /// Deletes used resources.
   void dispose() {}
