@@ -40,6 +40,63 @@ connector.requestNotificationPermissions()
 ```
 6. Build on device and test your solution using Firebase Console and NWPusher app.
 
+## Additional APNS features:
+### Displaying notification while in foreground
+
+```dart
+final connector = createPushConnector();
+if (connector is ApnsPushConnector) {
+  connector.shouldPresent = (x) => Future.value(true);
+}
+```
+
+### Handling predefined actions
+
+Firstly, configure supported actions:
+```dart
+final connector = createPushConnector();
+if (connector is ApnsPushConnector) {
+  connector.setNotificationCategories([
+    UNNotificationCategory(
+      identifier: 'MEETING_INVITATION',
+      actions: [
+        UNNotificationAction(
+          identifier: 'ACCEPT_ACTION',
+          title: 'Accept',
+          options: [],
+        ),
+        UNNotificationAction(
+          identifier: 'DECLINE_ACTION',
+          title: 'Decline',
+          options: [],
+        ),
+      ],
+      intentIdentifiers: [],
+      options: [],
+    ),
+  ]);
+}
+```
+
+Then, handle possible actions in your push handler:
+```dart
+Future<dynamic> onPush(String name, Map<String, dynamic> payload) {
+  storage.append('$name: $payload');
+
+  final action = UNNotificationAction.getIdentifier(payload);
+
+  if (action == 'MEETING_INVITATION') {
+    // do something
+  }
+
+  return Future.value(true);
+}
+```
+
+Note: if user clickes your notification while app is in the background, push will be delivered through onResume without actually waking up the app. Make sure your handling of given action is quick and error free, as execution time in for apps running in the background is very limited.
+
+Check the example project for fully working code.
+
 ## Troubleshooting
 
 1. Ensure that you are testing on actual device. NOTE: this may not be needed from 11.4: https://ohmyswift.com/blog/2020/02/13/simulating-remote-push-notifications-in-a-simulator/

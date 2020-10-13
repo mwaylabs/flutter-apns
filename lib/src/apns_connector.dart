@@ -1,9 +1,11 @@
 import 'dart:async';
 
-import 'package:flutter_apns/src/connector.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter_apns/src/connector.dart';
 import 'package:flutter/services.dart' hide MessageHandler;
 export 'package:flutter_apns/src/connector.dart';
+
+typedef WillPresentHandler = Future<bool> Function(Map<String, dynamic>);
 
 class ApnsPushConnector extends PushConnector {
   final MethodChannel _channel = const MethodChannel('flutter_apns');
@@ -57,11 +59,18 @@ class ApnsPushConnector extends PushConnector {
         return _onLaunch(call.arguments.cast<String, dynamic>());
       case 'onResume':
         return _onResume(call.arguments.cast<String, dynamic>());
+      case 'willPresent':
+        final payload = call.arguments.cast<String, dynamic>();
+        return shouldPresent?.call(payload) ?? Future.value(false);
 
       default:
         throw UnsupportedError('Unrecognized JSON message');
     }
   }
+
+  /// Handler that returns true/false to decide if push alert should be displayed when in foreground.
+  /// Returning true will delay onMessage callback until user actually clicks on it
+  WillPresentHandler shouldPresent;
 
   @override
   final isDisabledByUser = ValueNotifier(null);
@@ -76,6 +85,15 @@ class ApnsPushConnector extends PushConnector {
   void dispose() {
     _iosSettingsStreamController.close();
     super.dispose();
+  }
+
+  /// https://developer.apple.com/documentation/usernotifications/declaring_your_actionable_notification_types
+  Future<void> setNotificationCategories(
+      List<UNNotificationCategory> categories) {
+    return _channel.invokeMethod(
+      'setNotificationCategories',
+      categories.map((e) => e.toJson()).toList(),
+    );
   }
 
   @override
@@ -107,4 +125,78 @@ class IosNotificationSettings {
 
   @override
   String toString() => 'PushNotificationSettings ${toMap()}';
+}
+
+/// https://developer.apple.com/documentation/usernotifications/unnotificationcategory
+class UNNotificationCategory {
+  final String identifier;
+  final List<UNNotificationAction> actions;
+  final List<String> intentIdentifiers;
+  final List<UNNotificationCategoryOptions> options;
+
+  Map<String, dynamic> toJson() {
+    return {
+      'identifier': identifier,
+      'actions': actions.map((e) => e.toJson()).toList(),
+      'intentIdentifiers': intentIdentifiers,
+      'options': _optionsToJson(options),
+    };
+  }
+
+  UNNotificationCategory({
+    @required this.identifier,
+    @required this.actions,
+    @required this.intentIdentifiers,
+    @required this.options,
+  });
+}
+
+/// https://developer.apple.com/documentation/usernotifications/UNNotificationAction
+class UNNotificationAction {
+  final String identifier;
+  final String title;
+  final List<UNNotificationActionOptions> options;
+
+  static const defaultIdentifier =
+      'com.apple.UNNotificationDefaultActionIdentifier';
+
+  /// Returns action identifier associated with this push.
+  /// May be null, UNNotificationAction.defaultIdentifier, or value declared in setNotificationCategories
+  static String getIdentifier(Map<String, dynamic> payload) {
+    return payload['aps']['actionIdentifier'];
+  }
+
+  UNNotificationAction({
+    @required this.identifier,
+    @required this.title,
+    @required this.options,
+  });
+
+  dynamic toJson() {
+    return {
+      'identifier': identifier,
+      'title': title,
+      'options': _optionsToJson(options),
+    };
+  }
+}
+
+/// https://developer.apple.com/documentation/usernotifications/unnotificationactionoptions
+enum UNNotificationActionOptions {
+  authenticationRequired,
+  destructive,
+  foreground,
+}
+
+/// https://developer.apple.com/documentation/usernotifications/unnotificationcategoryoptions
+enum UNNotificationCategoryOptions {
+  customDismissAction,
+  allowInCarPlay,
+  hiddenPreviewsShowTitle,
+  hiddenPreviewsShowSubtitle,
+  allowAnnouncement,
+}
+
+List<String> _optionsToJson(List values) {
+  return values.map((e) => e.toString()).toList();
 }

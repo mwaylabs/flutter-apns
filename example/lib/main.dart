@@ -17,7 +17,8 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp> {
   final PushConnector connector = createPushConnector();
 
-  void _register() {
+  Future<void> _register() async {
+    final connector = this.connector;
     connector.configure(
       onLaunch: (data) => onPush('onLaunch', data),
       onResume: (data) => onPush('onResume', data),
@@ -28,6 +29,29 @@ class _MyAppState extends State<MyApp> {
       print('Token ${connector.token.value}');
     });
     connector.requestNotificationPermissions();
+
+    if (connector is ApnsPushConnector) {
+      connector.shouldPresent = (x) => Future.value(true);
+      connector.setNotificationCategories([
+        UNNotificationCategory(
+          identifier: 'MEETING_INVITATION',
+          actions: [
+            UNNotificationAction(
+              identifier: 'ACCEPT_ACTION',
+              title: 'Accept',
+              options: UNNotificationActionOptions.values,
+            ),
+            UNNotificationAction(
+              identifier: 'DECLINE_ACTION',
+              title: 'Decline',
+              options: [],
+            ),
+          ],
+          intentIdentifiers: [],
+          options: UNNotificationCategoryOptions.values,
+        ),
+      ]);
+    }
   }
 
   @override
@@ -76,8 +100,15 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-Future<dynamic> onPush(String name, Map<String, dynamic> data) {
-  storage.append('$name: $data');
+Future<dynamic> onPush(String name, Map<String, dynamic> payload) {
+  storage.append('$name: $payload');
+
+  final action = UNNotificationAction.getIdentifier(payload);
+
+  if (action == 'MEETING_INVITATION') {
+    // do something
+  }
+
   return Future.value(true);
 }
 
