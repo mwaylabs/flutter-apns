@@ -1,3 +1,8 @@
+### 1.4.0
+* (#32) add unregister method
+* (#24) add support for foreground alerts
+* (#15) add support for actions
+
 ### 1.3.1
 * documentation & project structure cleanup
 
