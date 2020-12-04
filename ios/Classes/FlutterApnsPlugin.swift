@@ -35,9 +35,6 @@ func getFlutterError(_ error: Error) -> FlutterError {
             
         case "configure":
             UIApplication.shared.registerForRemoteNotifications()
-            if let notification = launchNotification {
-                channel.invokeMethod("onLaunch", arguments: notification)
-            }
             result(nil)
             
         case "unregister":
@@ -173,7 +170,7 @@ func getFlutterError(_ error: Error) -> FlutterError {
     public func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) -> Bool {
         
         if resumingFromBackground {
-            channel.invokeMethod("onResume", arguments: userInfo)
+            onResume(userInfo: userInfo)
         } else {
             channel.invokeMethod("onMessage", arguments: userInfo)
         }
@@ -211,8 +208,18 @@ func getFlutterError(_ error: Error) -> FlutterError {
         dict["actionIdentifier"] = response.actionIdentifier
         userInfo["aps"] = dict
         
-        channel.invokeMethod("onResume", arguments: userInfo)
+        onResume(userInfo: userInfo)
         completionHandler()
+    }
+    
+    func onResume(userInfo: [AnyHashable: Any]) {
+        if let launchNotification = launchNotification {
+            channel.invokeMethod("onLaunch", arguments: userInfo)
+            self.launchNotification = nil
+            return
+        }
+        
+        channel.invokeMethod("onResume", arguments: userInfo)
     }
 }
 
