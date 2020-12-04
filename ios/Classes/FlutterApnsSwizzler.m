@@ -10,7 +10,7 @@ static int swizzleCounter;
 @implementation FlutterApnsSwizzler
 
 + (BOOL)didSwizzle {
-    return swizzleCounter == 2;
+    return swizzleCounter > 0;
 }
 
 + (void)apns_registerWithRegistrar:(NSObject<FlutterPluginRegistrar> *)registrar {
@@ -38,8 +38,24 @@ static int swizzleCounter;
         method_setImplementation(origMethod, method_getImplementation(newMethod));
 }
 
++ (BOOL)shouldDisableFirebaseCore {
+    NSObject *disable = [NSBundle mainBundle].infoDictionary[@"flutter_apns.disable_firebase_core"];
+    
+    if (disable) {
+        if ([disable isKindOfClass:[NSNumber class]]) {
+            return ((NSNumber *)disable).boolValue;
+        }
+        NSAssert(false, @"flutter_apns: invalid value of flutter_apns.disable_firebase_core");
+    }
+    
+    return YES;
+}
+
 + (void)load {
-    [self disablePluginNamed:@"FLTFirebaseCorePlugin"];
+    if ([self shouldDisableFirebaseCore]) {
+        [self disablePluginNamed:@"FLTFirebaseCorePlugin"];
+    }
+    
     [self disablePluginNamed:@"FLTFirebaseMessagingPlugin"];
 }
 

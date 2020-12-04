@@ -97,6 +97,16 @@ Note: if user clickes your notification while app is in the background, push wil
 
 Check the example project for fully working code.
 
+## Enabling FirebaseCore
+If you want to use firebase, but not firebase messaging, add this configuration entry in your Info.plist:
+
+```plist
+	<key>flutter_apns.disable_firebase_core</key>
+	<false/>
+```
+
+
+
 ## Troubleshooting
 
 1. Ensure that you are testing on actual device. NOTE: this may not be needed from 11.4: https://ohmyswift.com/blog/2020/02/13/simulating-remote-push-notifications-in-a-simulator/
