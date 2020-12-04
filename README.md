@@ -100,9 +100,9 @@ Check the example project for fully working code.
 ## Enabling FirebaseCore
 If you want to use firebase, but not firebase messaging, add this configuration entry in your Info.plist:
 
-```plist
-	<key>flutter_apns.disable_firebase_core</key>
-	<false/>
+```
+<key>flutter_apns.disable_firebase_core</key>
+<false/>
 ```
 
 
