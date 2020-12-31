@@ -20,6 +20,10 @@ class ApnsPushConnector extends PushConnector {
         'requestNotificationPermissions', iosSettings.toMap());
   }
 
+  void getAuthorizationStatus() {
+    _channel.invokeMethod('getAuthorizationStatus', []);
+  }
+
   final StreamController<IosNotificationSettings> _iosSettingsStreamController =
       StreamController<IosNotificationSettings>.broadcast();
 
@@ -53,6 +57,9 @@ class ApnsPushConnector extends PushConnector {
 
         isDisabledByUser.value = obj?.alert == false;
         return null;
+      case 'setAuthorizationStatus':
+        authorizationStatus.value = call.arguments;
+        return null;
       case 'onMessage':
         return _onMessage(call.arguments.cast<String, dynamic>());
       case 'onLaunch':
@@ -74,6 +81,8 @@ class ApnsPushConnector extends PushConnector {
 
   @override
   final isDisabledByUser = ValueNotifier(null);
+
+  final authorizationStatus = ValueNotifier<String>(null);
 
   @override
   final token = ValueNotifier<String>(null);

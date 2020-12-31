@@ -32,28 +32,26 @@ func getFlutterError(_ error: Error) -> FlutterError {
         switch call.method {
         case "requestNotificationPermissions":
             requestNotificationPermissions(call, result: result)
-            
         case "configure":
             UIApplication.shared.registerForRemoteNotifications()
             result(nil)
-            
+        case "getAuthorizationStatus":
+            getAuthorizationStatus();
+            result(nil)
         case "unregister":
             UIApplication.shared.unregisterForRemoteNotifications()
             result(nil)
-            
         case "setNotificationCategories":
             setNotificationCategories(arguments: call.arguments!)
             result(nil)
-            
         default:
             assertionFailure(call.method)
             result(FlutterMethodNotImplemented)
         }
     }
-    
+
     func setNotificationCategories(arguments: Any) {
         let arguments = arguments as! [[String: Any]]
-        
         func decodeCategory(map: [String: Any]) -> UNNotificationCategory {
             return UNNotificationCategory(
                 identifier: map["identifier"] as! String,
@@ -62,14 +60,13 @@ func getFlutterError(_ error: Error) -> FlutterError {
                 options: decodeCategoryOptions(data: map["options"] as! [String])
             )
         }
-        
         func decodeCategoryOptions(data: [String]) -> UNNotificationCategoryOptions {
             let mapped = data.compactMap {
                 UNNotificationCategoryOptions.stringToValue[$0]
             }
             return .init(mapped)
         }
-        
+
         func decodeAction(map: [String: Any]) -> UNNotificationAction {
             return UNNotificationAction(
                 identifier: map["identifier"] as! String,
@@ -77,16 +74,31 @@ func getFlutterError(_ error: Error) -> FlutterError {
                 options: decodeActionOptions(data: map["options"] as! [String])
             )
         }
-        
+
         func decodeActionOptions(data: [String]) -> UNNotificationActionOptions {
             let mapped = data.compactMap {
                 UNNotificationActionOptions.stringToValue[$0]
             }
             return .init(mapped)
         }
-        
+
         let categories = arguments.map(decodeCategory)
         UNUserNotificationCenter.current().setNotificationCategories(Set(categories))
+    }
+
+    func getAuthorizationStatus()  {
+        UNUserNotificationCenter.current().getNotificationSettings { (settings) in
+            switch settings.authorizationStatus {
+            case .authorized:
+                self.channel.invokeMethod("setAuthorizationStatus", arguments: "authorized")
+            case .denied:
+                self.channel.invokeMethod("setAuthorizationStatus", arguments: "denied")
+            case .notDetermined:
+                self.channel.invokeMethod("setAuthorizationStatus", arguments: "notDetermined")
+            default:
+                self.channel.invokeMethod("setAuthorizationStatus", arguments: "unsupported status")
+            }
+        }
     }
     
     func requestNotificationPermissions(_ call: FlutterMethodCall, result: @escaping FlutterResult) {
