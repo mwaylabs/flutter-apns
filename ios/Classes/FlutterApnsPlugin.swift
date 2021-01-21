@@ -35,6 +35,14 @@ func getFlutterError(_ error: Error) -> FlutterError {
             
         case "configure":
             UIApplication.shared.registerForRemoteNotifications()
+
+            // check for onLaunch notification *after* configure has been ran
+            if launchNotification != nil {
+                NSLog("configure launchNotification: %@", self.launchNotification ?? "nil")
+                channel.invokeMethod("onLaunch", arguments: self.launchNotification)
+                self.launchNotification = nil
+                return
+            }
             result(nil)
             
         case "unregister":
@@ -215,13 +223,6 @@ func getFlutterError(_ error: Error) -> FlutterError {
     }
     
     func onResume(userInfo: [AnyHashable: Any]) {
-        if let launchNotification = launchNotification {
-            NSLog("onResume launchNotification: %@", self.launchNotification ?? "nil")
-            channel.invokeMethod("onLaunch", arguments: userInfo)
-            self.launchNotification = nil
-            return
-        }
-        
         channel.invokeMethod("onResume", arguments: userInfo)
     }
 }
