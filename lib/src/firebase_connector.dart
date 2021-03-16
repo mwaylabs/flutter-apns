@@ -1,36 +1,67 @@
 import 'package:flutter_apns/src/connector.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 class FirebasePushConnector extends PushConnector {
-  final firebase = FirebaseMessaging.instance;
+  late final firebase = FirebaseMessaging.instance;
 
   @override
   final isDisabledByUser = ValueNotifier(false);
 
+  bool didInitialize = false;
+
   @override
-  void configure({onMessage, onLaunch, onResume, onBackgroundMessage}) {
-    FirebaseMessaging.onMessage.listen((event) => onMessage(event?.data));
-    FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      if (onResume != null) {
-        onResume(event?.data);
-      } else if (onLaunch != null) {
-        onLaunch(event?.data);
-      }
-    });
-    FirebaseMessaging.onBackgroundMessage(
-        (event) => onBackgroundMessage(event?.data));
+  void configure({
+    MessageHandler? onMessage,
+    MessageHandler? onLaunch,
+    MessageHandler? onResume,
+    MessageHandler? onBackgroundMessage,
+  }) async {
+    if (!didInitialize) {
+      await Firebase.initializeApp();
+      didInitialize = true;
+    }
 
     firebase.onTokenRefresh.listen((value) {
       token.value = value;
     });
+
+    FirebaseMessaging.onMessage.listen((event) => onMessage?.call(event.data));
+
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      onResume?.call(event.data);
+    });
+
+    if (onBackgroundMessage != null) {
+      _onBackgroundMessage = onBackgroundMessage;
+      FirebaseMessaging.onBackgroundMessage(_onBackground);
+    }
+
+    final initial = await FirebaseMessaging.instance.getInitialMessage();
+    if (initial != null) {
+      onLaunch?.call(initial.data);
+    }
+
+    token.value = await firebase.getToken();
+  }
+
+  static MessageHandler? _onBackgroundMessage;
+
+  static Future<void> _onBackground(RemoteMessage rm) {
+    return _onBackgroundMessage?.call(rm.data) ?? Future.value();
   }
 
   @override
   final token = ValueNotifier(null);
 
   @override
-  void requestNotificationPermissions() {
+  void requestNotificationPermissions() async {
+    if (!didInitialize) {
+      await Firebase.initializeApp();
+      didInitialize = true;
+    }
+
     firebase.requestPermission(
       alert: true,
       announcement: false,

@@ -6,17 +6,14 @@ version: 1.0.0+1
 environment:
   sdk: ">=2.1.0 <3.0.0"
 
-dependency_overrides:
-  plugin_platform_interface: ^2.0.0
-
 dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^0.1.2
-  path_provider: ^1.3.0
+  cupertino_icons: ^1.0.2 
+  path_provider: ^2.0.1
 
-  flutter_local_notifications: ^4.0.1+2
+  flutter_local_notifications: ^5.0.0-nullsafety.1
   flutter_apns:
     path: ../
 

@@ -78,11 +78,11 @@ class _MyAppState extends State<MyApp> {
                   return SelectableText('$data');
                 },
               ),
-              FlatButton(
+              TextButton(
                 child: Text('Register'),
                 onPressed: _register,
               ),
-              FlatButton(
+              TextButton(
                 child: Text('Unregister'),
                 onPressed: connector.unregister,
               ),

@@ -9,9 +9,9 @@ typedef WillPresentHandler = Future<bool> Function(Map<String, dynamic>);
 
 class ApnsPushConnector extends PushConnector {
   final MethodChannel _channel = const MethodChannel('flutter_apns');
-  MessageHandler _onMessage;
-  MessageHandler _onLaunch;
-  MessageHandler _onResume;
+  MessageHandler? _onMessage;
+  MessageHandler? _onLaunch;
+  MessageHandler? _onResume;
 
   @override
   void requestNotificationPermissions(
@@ -34,10 +34,10 @@ class ApnsPushConnector extends PushConnector {
   /// Sets up [MessageHandler] for incoming messages.
   @override
   void configure({
-    MessageHandler onMessage,
-    MessageHandler onLaunch,
-    MessageHandler onResume,
-    MessageHandler onBackgroundMessage,
+    MessageHandler? onMessage,
+    MessageHandler? onLaunch,
+    MessageHandler? onResume,
+    MessageHandler? onBackgroundMessage,
   }) {
     _onMessage = onMessage;
     _onLaunch = onLaunch;
@@ -55,17 +55,20 @@ class ApnsPushConnector extends PushConnector {
         final obj = IosNotificationSettings._fromMap(
             call.arguments.cast<String, bool>());
 
-        isDisabledByUser.value = obj?.alert == false;
+        isDisabledByUser.value = obj.alert == false;
         return null;
       case 'setAuthorizationStatus':
         authorizationStatus.value = call.arguments;
         return null;
       case 'onMessage':
-        return _onMessage(call.arguments.cast<String, dynamic>());
+        if (_onMessage == null) return;
+        return _onMessage!(call.arguments.cast<String, dynamic>());
       case 'onLaunch':
-        return _onLaunch(call.arguments.cast<String, dynamic>());
+        if (_onLaunch == null) return;
+        return _onLaunch!(call.arguments.cast<String, dynamic>());
       case 'onResume':
-        return _onResume(call.arguments.cast<String, dynamic>());
+        if (_onResume == null) return;
+        return _onResume!(call.arguments.cast<String, dynamic>());
       case 'willPresent':
         final payload = call.arguments.cast<String, dynamic>();
         return shouldPresent?.call(payload) ?? Future.value(false);
@@ -77,15 +80,15 @@ class ApnsPushConnector extends PushConnector {
 
   /// Handler that returns true/false to decide if push alert should be displayed when in foreground.
   /// Returning true will delay onMessage callback until user actually clicks on it
-  WillPresentHandler shouldPresent;
+  WillPresentHandler? shouldPresent;
 
   @override
-  final isDisabledByUser = ValueNotifier(null);
+  final isDisabledByUser = ValueNotifier(false);
 
-  final authorizationStatus = ValueNotifier<String>(null);
+  final authorizationStatus = ValueNotifier<String?>(null);
 
   @override
-  final token = ValueNotifier<String>(null);
+  final token = ValueNotifier<String?>(null);
 
   @override
   String get providerType => "APNS";
@@ -124,12 +127,12 @@ class IosNotificationSettings {
         alert = settings['alert'],
         badge = settings['badge'];
 
-  final bool sound;
-  final bool alert;
-  final bool badge;
+  final bool? sound;
+  final bool? alert;
+  final bool? badge;
 
   Map<String, dynamic> toMap() {
-    return <String, bool>{'sound': sound, 'alert': alert, 'badge': badge};
+    return <String, bool?>{'sound': sound, 'alert': alert, 'badge': badge};
   }
 
   @override
@@ -153,10 +156,10 @@ class UNNotificationCategory {
   }
 
   UNNotificationCategory({
-    @required this.identifier,
-    @required this.actions,
-    @required this.intentIdentifiers,
-    @required this.options,
+    required this.identifier,
+    required this.actions,
+    required this.intentIdentifiers,
+    required this.options,
   });
 }
 
@@ -171,14 +174,19 @@ class UNNotificationAction {
 
   /// Returns action identifier associated with this push.
   /// May be null, UNNotificationAction.defaultIdentifier, or value declared in setNotificationCategories
-  static String getIdentifier(Map<String, dynamic> payload) {
-    return payload['aps']['actionIdentifier'];
+  static String? getIdentifier(Map<String, dynamic> payload) {
+    final aps = payload['aps'];
+    if (aps == null) {
+      return null;
+    }
+
+    return aps['actionIdentifier'];
   }
 
   UNNotificationAction({
-    @required this.identifier,
-    @required this.title,
-    @required this.options,
+    required this.identifier,
+    required this.title,
+    required this.options,
   });
 
   dynamic toJson() {

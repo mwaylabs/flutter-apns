@@ -11,7 +11,7 @@ abstract class PushConnector {
 
   /// Value of registered token
   /// initially nil
-  ValueNotifier<String> get token;
+  ValueNotifier<String?> get token;
 
   /// Either GCM or APNS
   String get providerType;
@@ -20,10 +20,10 @@ abstract class PushConnector {
   /// It should be called as soon as app is launch or you won't get the `onLaunch` callback
   void configure({
     /// iOS only: return true to display notification while app is in foreground
-    MessageHandler onMessage,
-    MessageHandler onLaunch,
-    MessageHandler onResume,
-    MessageHandler onBackgroundMessage,
+    MessageHandler? onMessage,
+    MessageHandler? onLaunch,
+    MessageHandler? onResume,
+    MessageHandler? onBackgroundMessage,
   });
 
   /// Prompts (if need) the user to enable push notifications.

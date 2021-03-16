@@ -33,11 +33,14 @@ func getFlutterError(_ error: Error) -> FlutterError {
         case "requestNotificationPermissions":
             requestNotificationPermissions(call, result: result)
         case "configure":
+            assert(
+                UNUserNotificationCenter.current().delegate != nil,
+                "UNUserNotificationCenter.current().delegate is not set. Check readme at https://pub.dev/packages/flutter_apns."
+            )
             UIApplication.shared.registerForRemoteNotifications()
 
             // check for onLaunch notification *after* configure has been ran
             if launchNotification != nil {
-                NSLog("configure launchNotification: %@", self.launchNotification ?? "nil")
                 channel.invokeMethod("onLaunch", arguments: self.launchNotification)
                 self.launchNotification = nil
                 return
@@ -169,8 +172,6 @@ func getFlutterError(_ error: Error) -> FlutterError {
     
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [AnyHashable : Any] = [:]) -> Bool {
         launchNotification = launchOptions[UIApplication.LaunchOptionsKey.remoteNotification] as? [String: Any]
-        NSLog("\nlaunchNotification: %@", launchNotification ?? "nil")
-
         return true
     }
     
