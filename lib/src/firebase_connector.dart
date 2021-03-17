@@ -11,7 +11,15 @@ class FirebasePushConnector extends PushConnector {
   @override
   void configure({onMessage, onLaunch, onResume, onBackgroundMessage}) {
     FirebaseMessaging.onMessage.listen((event) => onMessage(event?.data));
-    FirebaseMessaging.onBackgroundMessage((event) => onBackgroundMessage(event?.data));
+    FirebaseMessaging.onMessageOpenedApp.listen((event) {
+      if (onResume != null) {
+        onResume(event?.data);
+      } else if (onLaunch != null) {
+        onLaunch(event?.data);
+      }
+    });
+    FirebaseMessaging.onBackgroundMessage(
+        (event) => onBackgroundMessage(event?.data));
 
     firebase.onTokenRefresh.listen((value) {
       token.value = value;
