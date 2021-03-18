@@ -98,7 +98,7 @@ Note: if user clickes your notification while app is in the background, push wil
 Check the example project for fully working code.
 
 ## Enabling FirebaseCore
-If you want to use firebase, but not firebase messaging, add this configuration entry in your Info.plist:
+If you want to use firebase, but not firebase messaging, add this configuration entry in your Info.plist (to avoid MissingPluginException):
 
 ```
 <key>flutter_apns.disable_firebase_core</key>
