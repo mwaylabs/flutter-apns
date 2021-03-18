@@ -34,6 +34,14 @@ func getFlutterError(_ error: Error) -> FlutterError {
             requestNotificationPermissions(call, result: result)
         case "configure":
             UIApplication.shared.registerForRemoteNotifications()
+
+            // check for onLaunch notification *after* configure has been ran
+            if launchNotification != nil {
+                NSLog("configure launchNotification: %@", self.launchNotification ?? "nil")
+                channel.invokeMethod("onLaunch", arguments: self.launchNotification)
+                self.launchNotification = nil
+                return
+            }
             result(nil)
         case "getAuthorizationStatus":
             getAuthorizationStatus();
@@ -161,6 +169,8 @@ func getFlutterError(_ error: Error) -> FlutterError {
     
     public func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [AnyHashable : Any] = [:]) -> Bool {
         launchNotification = launchOptions[UIApplication.LaunchOptionsKey.remoteNotification] as? [String: Any]
+        NSLog("\nlaunchNotification: %@", launchNotification ?? "nil")
+
         return true
     }
     
@@ -225,12 +235,6 @@ func getFlutterError(_ error: Error) -> FlutterError {
     }
     
     func onResume(userInfo: [AnyHashable: Any]) {
-        if let launchNotification = launchNotification {
-            channel.invokeMethod("onLaunch", arguments: userInfo)
-            self.launchNotification = nil
-            return
-        }
-        
         channel.invokeMethod("onResume", arguments: userInfo)
     }
 }

@@ -17,6 +17,7 @@ abstract class PushConnector {
   String get providerType;
 
   /// Configures callbacks for supported message situations.
+  /// It should be called as soon as app is launch or you won't get the `onLaunch` callback
   void configure({
     /// iOS only: return true to display notification while app is in foreground
     MessageHandler onMessage,
