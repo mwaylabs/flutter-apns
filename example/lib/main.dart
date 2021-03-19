@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
     connector.requestNotificationPermissions();
 
     if (connector is ApnsPushConnector) {
-      connector.shouldPresent = (x) => Future.value(true);
+      connector.shouldPresent = (x) => Future.value(false);
       connector.setNotificationCategories([
         UNNotificationCategory(
           identifier: 'MEETING_INVITATION',
@@ -56,6 +56,7 @@ class _MyAppState extends State<MyApp> {
 
   @override
   void initState() {
+    storage.append('restart');
     _register();
     super.initState();
   }
@@ -74,7 +75,7 @@ class _MyAppState extends State<MyApp> {
               Text('Token:'),
               ValueListenableBuilder(
                 valueListenable: connector.token,
-                builder: (context, data, __) {
+                builder: (context, dynamic data, __) {
                   return SelectableText('$data');
                 },
               ),
@@ -100,17 +101,17 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-Future<dynamic> onPush(String name, Map<String, dynamic> payload) {
-  storage.append('$name: $payload');
+Future<dynamic> onPush(String name, RemoteMessage payload) {
+  storage.append('$name: ${payload.notification?.title}');
 
-  final action = UNNotificationAction.getIdentifier(payload);
+  final action = UNNotificationAction.getIdentifier(payload.data);
 
-  if (action == 'MEETING_INVITATION') {
-    // do something
+  if (action != null && action != UNNotificationAction.defaultIdentifier) {
+    storage.append('Action: $action');
   }
 
   return Future.value(true);
 }
 
-Future<dynamic> _onBackgroundMessage(Map<String, dynamic> data) =>
+Future<dynamic> _onBackgroundMessage(RemoteMessage data) =>
     onPush('onBackgroundMessage', data);

@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
 
 class Storage extends ChangeNotifier {
-  File storage;
+  late File storage;
 
   String content = 'not initialized';
 

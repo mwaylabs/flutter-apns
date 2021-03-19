@@ -1,11 +1,12 @@
 import 'dart:async';
 
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter_apns/src/connector.dart';
 import 'package:flutter/services.dart' hide MessageHandler;
 export 'package:flutter_apns/src/connector.dart';
 
-typedef WillPresentHandler = Future<bool> Function(Map<String, dynamic>);
+typedef WillPresentHandler = Future<bool> Function(RemoteMessage);
 
 class ApnsPushConnector extends PushConnector {
   final MethodChannel _channel = const MethodChannel('flutter_apns');
@@ -61,21 +62,26 @@ class ApnsPushConnector extends PushConnector {
         authorizationStatus.value = call.arguments;
         return null;
       case 'onMessage':
-        if (_onMessage == null) return;
-        return _onMessage!(call.arguments.cast<String, dynamic>());
+        return _onMessage?.call(_extractMessage(call));
       case 'onLaunch':
-        if (_onLaunch == null) return;
-        return _onLaunch!(call.arguments.cast<String, dynamic>());
+        return _onLaunch?.call(_extractMessage(call));
       case 'onResume':
-        if (_onResume == null) return;
-        return _onResume!(call.arguments.cast<String, dynamic>());
+        return _onResume?.call(_extractMessage(call));
       case 'willPresent':
-        final payload = call.arguments.cast<String, dynamic>();
-        return shouldPresent?.call(payload) ?? Future.value(false);
+        return shouldPresent?.call(_extractMessage(call)) ??
+            Future.value(false);
 
       default:
         throw UnsupportedError('Unrecognized JSON message');
     }
+  }
+
+  RemoteMessage _extractMessage(MethodCall call) {
+    final map = call.arguments as Map;
+    // fix null safety errors
+    map.putIfAbsent('contentAvailable', () => false);
+    map.putIfAbsent('mutableContent', () => false);
+    return RemoteMessage.fromMap(map.cast());
   }
 
   /// Handler that returns true/false to decide if push alert should be displayed when in foreground.
@@ -175,12 +181,7 @@ class UNNotificationAction {
   /// Returns action identifier associated with this push.
   /// May be null, UNNotificationAction.defaultIdentifier, or value declared in setNotificationCategories
   static String? getIdentifier(Map<String, dynamic> payload) {
-    final aps = payload['aps'];
-    if (aps == null) {
-      return null;
-    }
-
-    return aps['actionIdentifier'];
+    return payload['actionIdentifier'];
   }
 
   UNNotificationAction({

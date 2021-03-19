@@ -27,29 +27,19 @@ class FirebasePushConnector extends PushConnector {
       token.value = value;
     });
 
-    FirebaseMessaging.onMessage.listen((event) => onMessage?.call(event.data));
-
-    FirebaseMessaging.onMessageOpenedApp.listen((event) {
-      onResume?.call(event.data);
-    });
+    FirebaseMessaging.onMessage.listen(onMessage);
+    FirebaseMessaging.onMessageOpenedApp.listen(onResume);
 
     if (onBackgroundMessage != null) {
-      _onBackgroundMessage = onBackgroundMessage;
-      FirebaseMessaging.onBackgroundMessage(_onBackground);
+      FirebaseMessaging.onBackgroundMessage(onBackgroundMessage);
     }
 
     final initial = await FirebaseMessaging.instance.getInitialMessage();
     if (initial != null) {
-      onLaunch?.call(initial.data);
+      onLaunch?.call(initial);
     }
 
     token.value = await firebase.getToken();
-  }
-
-  static MessageHandler? _onBackgroundMessage;
-
-  static Future<void> _onBackground(RemoteMessage rm) {
-    return _onBackgroundMessage?.call(rm.data) ?? Future.value();
   }
 
   @override
