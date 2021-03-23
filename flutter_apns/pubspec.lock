@@ -103,7 +103,7 @@ packages:
       path: "../flutter_apns_only"
       relative: true
     source: path
-    version: "1.5.0"
+    version: "1.5.0-dev.1"
   flutter_test:
     dependency: "direct dev"
     description: flutter
