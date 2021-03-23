@@ -4,10 +4,10 @@ PODS:
   - Firebase/Messaging (7.3.0):
     - Firebase/CoreOnly
     - FirebaseMessaging (~> 7.3.0)
-  - firebase_core (1.0.1):
+  - firebase_core (1.0.2):
     - Firebase/CoreOnly (= 7.3.0)
     - Flutter
-  - firebase_messaging (9.0.0):
+  - firebase_messaging (9.0.1):
     - Firebase/Messaging (= 7.3.0)
     - firebase_core
     - Flutter
@@ -38,7 +38,7 @@ PODS:
     - GoogleUtilities/Reachability (~> 7.0)
     - GoogleUtilities/UserDefaults (~> 7.0)
   - Flutter (1.0.0)
-  - flutter_apns (0.0.1):
+  - flutter_apns_only (0.0.1):
     - Flutter
   - flutter_local_notifications (0.0.1):
     - Flutter
@@ -76,7 +76,7 @@ DEPENDENCIES:
   - firebase_core (from `.symlinks/plugins/firebase_core/ios`)
   - firebase_messaging (from `.symlinks/plugins/firebase_messaging/ios`)
   - Flutter (from `Flutter`)
-  - flutter_apns (from `.symlinks/plugins/flutter_apns/ios`)
+  - flutter_apns_only (from `.symlinks/plugins/flutter_apns_only/ios`)
   - flutter_local_notifications (from `.symlinks/plugins/flutter_local_notifications/ios`)
   - path_provider (from `.symlinks/plugins/path_provider/ios`)
 
@@ -100,8 +100,8 @@ EXTERNAL SOURCES:
     :path: ".symlinks/plugins/firebase_messaging/ios"
   Flutter:
     :path: Flutter
-  flutter_apns:
-    :path: ".symlinks/plugins/flutter_apns/ios"
+  flutter_apns_only:
+    :path: ".symlinks/plugins/flutter_apns_only/ios"
   flutter_local_notifications:
     :path: ".symlinks/plugins/flutter_local_notifications/ios"
   path_provider:
@@ -109,15 +109,15 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   Firebase: 26223c695fe322633274198cb19dca8cb7e54416
-  firebase_core: d2e03528e2a600891f6f460b5e92932624480d1d
-  firebase_messaging: fc1811236795c2313b8339c35d31295b1cd8486f
+  firebase_core: e6cbb0d1f7091edfcae31559e58224bfc1e455dc
+  firebase_messaging: 446f8b30023ace26f162a9309b5bd1fdff78c011
   FirebaseCore: 4d3c72622ce0e2106aaa07bb4b2935ba2c370972
   FirebaseCoreDiagnostics: 066f996579cf097bdad3d7dc9a918d6b9e129c50
   FirebaseInstallations: 7f7ed0e7e27fb51f57291e1876e2ddb1524126c1
   FirebaseInstanceID: aaecc93b4528bbcafea12c477e26827719ca1183
   FirebaseMessaging: 68d1bcb14880189558a8ae57167abe0b7e417232
   Flutter: 434fef37c0980e73bb6479ef766c45957d4b510c
-  flutter_apns: ddc629f26016140bf52165040b0a8e8869f9ce32
+  flutter_apns_only: 3d91c0ca9dbef4439874858590909a19f8ed06a4
   flutter_local_notifications: 0c0b1ae97e741e1521e4c1629a459d04b9aec743
   GoogleDataTransport: b006084b73915a42c28a3466961a4edda3065da6
   GoogleUtilities: e1d9ed4e544fc32a93e00e721400cbc3f377200d

@@ -15,7 +15,6 @@ dependencies:
 
   flutter_local_notifications: ^5.0.0-nullsafety.1
   flutter_apns:
-    path: ../
 
 dev_dependencies:
   flutter_test:
@@ -23,3 +22,9 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+dependency_overrides:
+  flutter_apns_only:
+    path: ../flutter_apns_only
+  flutter_apns:
+    path: ../flutter_apns

@@ -31,7 +31,10 @@ class _MyAppState extends State<MyApp> {
     connector.requestNotificationPermissions();
 
     if (connector is ApnsPushConnector) {
-      connector.shouldPresent = (x) => Future.value(false);
+      connector.shouldPresent = (x) async {
+        final remote = RemoteMessage.fromMap(x.payload);
+        return remote.category == 'MEETING_INVITATION';
+      };
       connector.setNotificationCategories([
         UNNotificationCategory(
           identifier: 'MEETING_INVITATION',
