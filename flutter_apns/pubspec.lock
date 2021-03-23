@@ -100,9 +100,9 @@ packages:
   flutter_apns_only:
     dependency: "direct main"
     description:
-      path: "../flutter_apns_only"
-      relative: true
-    source: path
+      name: flutter_apns_only
+      url: "https://pub.dartlang.org"
+    source: hosted
     version: "1.5.0-dev.1"
   flutter_test:
     dependency: "direct dev"

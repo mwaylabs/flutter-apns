@@ -10,14 +10,10 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: any
+  firebase_core: ^1.0.1
   firebase_messaging: ^9.0.0
-  flutter_apns_only: ^1.5.0
+  flutter_apns_only: ^1.5.0-dev.1
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  
-dependency_overrides:
-  flutter_apns_only:
-    path: ../flutter_apns_only

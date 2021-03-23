@@ -1,4 +1,4 @@
-### 1.5.0
+### 1.5.0-dev.1
 * (#51) Update firebase push connector to support the firebase_messaging 9.0.0. API
 * (#43) Fix onLaunch not working with closed app
 * (#41) Add authorization status for iOS
