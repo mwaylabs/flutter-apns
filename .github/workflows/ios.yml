@@ -10,6 +10,9 @@ jobs:
   build:
     name: Build and Test default scheme using any available iPhone simulator
     runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: example/ios
 
     steps:
       - name: Checkout
