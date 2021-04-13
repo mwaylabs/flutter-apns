@@ -23,6 +23,8 @@ jobs:
           default=$(echo $scheme_list | ruby -e "require 'json'; puts JSON.parse(STDIN.gets)['project']['targets'][0]")
           echo $default | cat >default
           echo Using default scheme: $default
+      - uses: subosito/flutter-action@v1
+      - run: cd .. && flutter build ios --no-codesign --config-only
       - name: Build
         env:
           scheme: ${{ 'default' }}
