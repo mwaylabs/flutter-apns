@@ -1,3 +1,5 @@
+### 1.5.1
+* (#58) fix unable to build android (update firebase dependencies)
 ### 1.5.0-dev.1
 * (#51) Update firebase push connector to support the firebase_messaging 9.0.0. API
 * (#43) Fix onLaunch not working with closed app
