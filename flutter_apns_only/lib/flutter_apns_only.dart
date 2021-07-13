@@ -25,14 +25,15 @@ class ApnsPushConnectorOnly {
   ApnsMessageHandler? _onLaunch;
   ApnsMessageHandler? _onResume;
 
-  void requestNotificationPermissions(
-      [IosNotificationSettings iosSettings = const IosNotificationSettings()]) {
-    _channel.invokeMethod(
+  Future<bool> requestNotificationPermissions(
+      [IosNotificationSettings iosSettings = const IosNotificationSettings()]) async {
+    final bool? result = await _channel.invokeMethod<bool>(
         'requestNotificationPermissions', iosSettings.toMap());
+    return result ?? false;
   }
 
-  void getAuthorizationStatus() {
-    _channel.invokeMethod('getAuthorizationStatus', []);
+  Future<String?> getAuthorizationStatus() async {
+    return await _channel.invokeMethod<String?>('getAuthorizationStatus', []);
   }
 
   final StreamController<IosNotificationSettings> _iosSettingsStreamController =
@@ -66,9 +67,6 @@ class ApnsPushConnectorOnly {
             call.arguments.cast<String, bool>());
 
         isDisabledByUser.value = obj.alert == false;
-        return null;
-      case 'setAuthorizationStatus':
-        authorizationStatus.value = call.arguments;
         return null;
       case 'onMessage':
         return _onMessage?.call(_extractMessage(call));
