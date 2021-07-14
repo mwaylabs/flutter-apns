@@ -15,6 +15,13 @@ class ApnsRemoteMessage {
 typedef ApnsMessageHandler = Future<void> Function(ApnsRemoteMessage);
 typedef WillPresentHandler = Future<bool> Function(ApnsRemoteMessage);
 
+enum ApnsAuthorizationStatus {
+  authorized,
+  denied,
+  notDetermined,
+  unsupported,
+}
+
 class ApnsPushConnectorOnly {
   final MethodChannel _channel = () {
     assert(Platform.isIOS,
@@ -25,14 +32,15 @@ class ApnsPushConnectorOnly {
   ApnsMessageHandler? _onLaunch;
   ApnsMessageHandler? _onResume;
 
-  void requestNotificationPermissions(
-      [IosNotificationSettings iosSettings = const IosNotificationSettings()]) {
-    _channel.invokeMethod(
+  Future<bool> requestNotificationPermissions(
+      [IosNotificationSettings iosSettings = const IosNotificationSettings()]) async {
+    final bool? result = await _channel.invokeMethod<bool>(
         'requestNotificationPermissions', iosSettings.toMap());
+    return result ?? false;
   }
 
-  void getAuthorizationStatus() {
-    _channel.invokeMethod('getAuthorizationStatus', []);
+  Future<ApnsAuthorizationStatus> getAuthorizationStatus() async {
+    return _authorizationStatusForString(await _channel.invokeMethod<String?>('getAuthorizationStatus', []));
   }
 
   final StreamController<IosNotificationSettings> _iosSettingsStreamController =
@@ -67,9 +75,6 @@ class ApnsPushConnectorOnly {
 
         isDisabledByUser.value = obj.alert == false;
         return null;
-      case 'setAuthorizationStatus':
-        authorizationStatus.value = call.arguments;
-        return null;
       case 'onMessage':
         return _onMessage?.call(_extractMessage(call));
       case 'onLaunch':
@@ -93,13 +98,25 @@ class ApnsPushConnectorOnly {
     return ApnsRemoteMessage.fromMap(map.cast());
   }
 
+  ApnsAuthorizationStatus _authorizationStatusForString(String? value) {
+    switch (value) {
+      case 'authorized':
+        return ApnsAuthorizationStatus.authorized;
+      case 'denied':
+        return ApnsAuthorizationStatus.denied;
+      case 'notDetermined':
+        return ApnsAuthorizationStatus.notDetermined;
+      case 'unsupported':
+      default:
+        return ApnsAuthorizationStatus.unsupported;
+    }
+  }
+
   /// Handler that returns true/false to decide if push alert should be displayed when in foreground.
   /// Returning true will delay onMessage callback until user actually clicks on it
   WillPresentHandler? shouldPresent;
 
   final isDisabledByUser = ValueNotifier(false);
-
-  final authorizationStatus = ValueNotifier<String?>(null);
 
   final token = ValueNotifier<String?>(null);
 

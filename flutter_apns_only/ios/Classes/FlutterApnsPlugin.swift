@@ -41,8 +41,7 @@ func getFlutterError(_ error: Error) -> FlutterError {
             }
             result(nil)
         case "getAuthorizationStatus":
-            getAuthorizationStatus();
-            result(nil)
+            getAuthorizationStatus(result)
         case "unregister":
             UIApplication.shared.unregisterForRemoteNotifications()
             result(nil)
@@ -91,17 +90,17 @@ func getFlutterError(_ error: Error) -> FlutterError {
         UNUserNotificationCenter.current().setNotificationCategories(Set(categories))
     }
 
-    func getAuthorizationStatus()  {
+    func getAuthorizationStatus(_ result: @escaping FlutterResult) {
         UNUserNotificationCenter.current().getNotificationSettings { (settings) in
             switch settings.authorizationStatus {
             case .authorized:
-                self.channel.invokeMethod("setAuthorizationStatus", arguments: "authorized")
+                result("authorized")
             case .denied:
-                self.channel.invokeMethod("setAuthorizationStatus", arguments: "denied")
+                result("denied")
             case .notDetermined:
-                self.channel.invokeMethod("setAuthorizationStatus", arguments: "notDetermined")
+                result("notDetermined")
             default:
-                self.channel.invokeMethod("setAuthorizationStatus", arguments: "unsupported status")
+                result("unsupported")
             }
         }
     }
