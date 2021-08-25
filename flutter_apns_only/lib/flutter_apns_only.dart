@@ -52,6 +52,7 @@ class ApnsPushConnectorOnly {
     _onMessage = onMessage;
     _onLaunch = onLaunch;
     _onResume = onResume;
+    _onBackground = onBackgroundMessage;
     _channel.setMethodCallHandler(_handleMethod);
     _channel.invokeMethod('configure');
   }
@@ -70,6 +71,8 @@ class ApnsPushConnectorOnly {
       case 'setAuthorizationStatus':
         authorizationStatus.value = call.arguments;
         return null;
+      case 'onBackgroundMessage':
+        return _onBackground?.call(_extractMessage(call));
       case 'onMessage':
         return _onMessage?.call(_extractMessage(call));
       case 'onLaunch':
@@ -88,8 +91,8 @@ class ApnsPushConnectorOnly {
   ApnsRemoteMessage _extractMessage(MethodCall call) {
     final map = call.arguments as Map;
     // fix null safety errors
-    map.putIfAbsent('contentAvailable', () => false);
-    map.putIfAbsent('mutableContent', () => false);
+    map['contentAvailable'] = true;
+    map['mutableContent'] = true;
     return ApnsRemoteMessage.fromMap(map.cast());
   }
 
