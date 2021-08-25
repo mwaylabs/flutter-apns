@@ -190,7 +190,7 @@ func getFlutterError(_ error: Error) -> FlutterError {
         let userInfo = FlutterApnsSerialization.remoteMessageUserInfo(toDict: userInfo)
         
         if resumingFromBackground {
-            onResume(userInfo: userInfo)
+            channel.invokeMethod("onBackgroundMessage", arguments: userInfo)
         } else {
             channel.invokeMethod("onMessage", arguments: userInfo)
         }
