@@ -97,7 +97,7 @@ class ApnsPushConnectorOnly {
   /// Returning true will delay onMessage callback until user actually clicks on it
   WillPresentHandler? shouldPresent;
 
-  final isDisabledByUser = ValueNotifier(false);
+  final isDisabledByUser = ValueNotifier<bool?>(null);
 
   final authorizationStatus = ValueNotifier<String?>(null);
 
