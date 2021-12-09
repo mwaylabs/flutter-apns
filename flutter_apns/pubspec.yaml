@@ -5,14 +5,14 @@ homepage: https://github.com/mwaylabs/flutter-apns
 
 environment:
   sdk: '>=2.12.0 <3.0.0'
-  flutter: ">=1.12.13+hotfix.5"
+  flutter: ">=2.2.0"
 
 dependencies:
   flutter:
     sdk: flutter
-  firebase_core: ^1.3.0
-  firebase_messaging: ^10.0.2
-  flutter_apns_only: ^1.5.0-dev.1
+  firebase_core: ^1.10.5
+  firebase_messaging: ^11.2.3
+  flutter_apns_only: ^1.5.0
 
 dev_dependencies:
   flutter_test:
