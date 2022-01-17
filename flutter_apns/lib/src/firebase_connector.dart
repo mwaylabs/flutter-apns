@@ -7,7 +7,7 @@ class FirebasePushConnector extends PushConnector {
   late final firebase = FirebaseMessaging.instance;
 
   @override
-  final isDisabledByUser = ValueNotifier(false);
+  final isDisabledByUser = ValueNotifier<bool?>(null);
 
   bool didInitialize = false;
 
