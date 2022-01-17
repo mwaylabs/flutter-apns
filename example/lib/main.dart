@@ -30,6 +30,8 @@ class _MyAppState extends State<MyApp> {
     });
     connector.requestNotificationPermissions();
 
+    final isDisabledByUser = connector.isDisabledByUser.value;
+
     if (connector is ApnsPushConnector) {
       connector.shouldPresent = (x) async {
         final remote = RemoteMessage.fromMap(x.payload);
