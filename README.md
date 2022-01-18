@@ -166,37 +166,44 @@ Setting up push notifications on iOS can be tricky since there is no way to perm
 1. Open example ios folder with Xcode
 2. Select Runner -> Signing & Capabilities
 3. Select your development team and add a globally unique bundle identifier. The one on the picture is already occupied:
-   ![Alt text](example/assets/Xcode_setup.png?raw=true)
+   ![](example/assets/Xcode_setup.png?raw=true)
 4. Go to https://developer.apple.com/account/resources/identifiers/list/bundleId and press on the plus button
 5. Select "App IDs" and press continue
+   ![](example/assets/register_app.png?raw=true)
 6. Select type "App"
 7. Select "App ID Prefix" which should be same as "Team ID"
 8. Enter description and bundle ID. The latter one needs to be the same as the bundle ID specified in 3.
 9. Select push notification capability
-10. Press on "Continue" and then on "Register"
-11. Go to https://developer.apple.com/account/resources/certificates and add a new certificate by pressing on the plus-button.
-12. Select 'Apple Push Notification service SSL (Sandbox & Production)'
-13. Select the app ID that you hav defined in point 4.-10.
-14. Select a Certificate Signing Request (CSR) file. See https://help.apple.com/developer-account/#/devbfa00fef7 on how to create this certificate
-15. When having finished, download the newly created Apple Push Services certificate
-16. Add certificate to your local keychain by opening the newly downloaded file
-17. Press on "login" on the upper left corner of your keychain window and select the tab "My Certificates"
-18. Right click on the Apple-Push-Services-certificate and export it as .p12-file
-19. Convert p12-file to pem-file by following command. Please consider that "flutterApns" needs to be replaces by your respective certificate name
+   ![](example/assets/select_capability.png?raw=true)
+11. Press on "Continue" and then on "Register"
+12. Go to https://developer.apple.com/account/resources/certificates and add a new certificate by pressing on the plus-button.
+13. Select 'Apple Push Notification service SSL (Sandbox & Production)'
+    ![](example/assets/push_notification_setup.png?raw=true)
+14. Select the app ID that you hav defined in point 4.-10.
+15. Select a Certificate Signing Request (CSR) file. See https://help.apple.com/developer-account/#/devbfa00fef7 on how to create this certificate
+16. When having finished, download the newly created Apple Push Services certificate
+17. Add certificate to your local keychain by opening the newly downloaded file
+18. Press on "login" on the upper left corner of your keychain window and select the tab "My Certificates"
+    ![](example/assets/keychain.png?raw=true)
+19. Right click on the Apple-Push-Services-certificate and export it as .p12-file
+20. Convert p12-file to pem-file by following command. Please consider that "flutterApns" needs to be replaced by your respective certificate name.<br>
+    [More info](https://stackoverflow.com/questions/1762555/creating-pem-file-for-apns)
     ```
     openssl pkcs12 -in flutterApns.p12 -out flutterApns.pem -nodes -clcerts
     ```
-20. Start example app
-21. Device token gets automatically printed when application was able to retrieve push token from APNS. This happens after accepting notification permission prompt.
-22. Send the following CURL from you development Mac. You can execute CURLS by copy-pasting them into Terminal and hit enter.
+21. Start example app on physical iPhone device from Xcode or your favorite IDE.
+22. Device token gets automatically printed when application was able to retrieve push token from APNS. This happens after accepting notification permission prompt.
+23. Send the following CURL from you development Mac. You can execute CURLs by copy-pasting them into Terminal and hit enter.<br>
+    [More info](https://gist.github.com/greencoder/16d1f8d7b0fed5b49cf64312ce2b72cc)
     ```curl
     curl -v \
     -d '{"aps":{"alert":"<your_message>","badge":2}}' \
     -H "apns-topic: <bundle_identifier_of_registered_app>" \
     -H "apns-priority: 10" \
     --http2 \
-    --cert <file_path_to_downloaded_signed_and_converted_certificate>.pem \
-    https://api.development.push.apple.com/3/device/d54875075791a5da22bcd83c7763c17e67838fd96063c545945ffeb9d57cfe62
-  ```
+    --cert <file_path_to_downloaded_sigxwned_and_converted_certificate>.pem \
+    https://api.development.push.apple.com/3/device/<device_token>
+    ```
+24. A push notification does appear if the example app is in background.
 
 When not utilizing the example app, you need to additionally [setup push notification capability inside Xcode](https://developer.apple.com/documentation/usernotifications/registering_your_app_with_apns) and add the code mentioned in [usage](#usage).
