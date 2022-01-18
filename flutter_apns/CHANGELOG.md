@@ -1,3 +1,6 @@
+### 1.5.2
+* update firebase dependencies
+* (#78) Do not hide push notification when opening app
 ### 1.5.1
 * (#58) fix unable to build android (update firebase dependencies)
 ### 1.5.0-dev.1
@@ -9,7 +12,7 @@
 
 ### 1.4.1
 * (#31) fix duplicated onLaunch onResume
-* (#37) add possibility to disable firebase core 
+* (#37) add possibility to disable firebase core
 
 ### 1.4.0
 * (#32) add unregister method
