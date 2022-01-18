@@ -176,8 +176,6 @@ func getFlutterError(_ error: Error) -> FlutterError {
     
     public func applicationDidBecomeActive(_ application: UIApplication) {
         resumingFromBackground = false
-        application.applicationIconBadgeNumber = 1
-        application.applicationIconBadgeNumber = 0
     }
     
     public func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
