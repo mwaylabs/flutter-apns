@@ -1,16 +1,16 @@
 name: flutter_apns_example
 description: Demonstrates how to use the flutter_apns plugin.
-publish_to: 'none'
+publish_to: "none"
 version: 1.0.0+1
 
 environment:
-  sdk: '>=2.12.0 <3.0.0'
+  sdk: ">=2.12.0 <3.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.2 
+  cupertino_icons: ^1.0.2
   path_provider: ^2.0.1
 
   flutter_local_notifications: ^5.0.0-nullsafety.1
@@ -24,7 +24,7 @@ flutter:
   uses-material-design: true
 
 dependency_overrides:
-  flutter_apns_only:
-    path: ../flutter_apns_only
+  # flutter_apns_only:
+  # path: ../flutter_apns_only
   flutter_apns:
     path: ../flutter_apns
