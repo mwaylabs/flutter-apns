@@ -124,7 +124,7 @@ packages:
       path: "../flutter_apns"
       relative: true
     source: path
-    version: "1.5.2"
+    version: "1.5.3"
   flutter_apns_only:
     dependency: transitive
     description:
