@@ -103,7 +103,7 @@ packages:
       name: flutter_apns_only
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "1.5.0"
+    version: "1.5.2"
   flutter_test:
     dependency: "direct dev"
     description: flutter
