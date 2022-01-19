@@ -1,35 +1,41 @@
 {
   "project_info": {
-    "project_number": "304236523340",
-    "firebase_url": "https://flutter-apns-example.firebaseio.com",
-    "project_id": "flutter-apns-example",
-    "storage_bucket": "flutter-apns-example.appspot.com"
+    "project_number": "510862848685",
+    "project_id": "flutter-apns-example-56d2e",
+    "storage_bucket": "flutter-apns-example-56d2e.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:304236523340:android:361fa5a9fa33ca5b1f29e9",
+        "mobilesdk_app_id": "1:510862848685:android:bdb37bc4f479a30bae4c24",
         "android_client_info": {
           "package_name": "com.mwaysolutions.flutter.apns_example"
         }
       },
       "oauth_client": [
         {
-          "client_id": "304236523340-nacm1vfcshbhh0c8e05d4gbf8iaebb1s.apps.googleusercontent.com",
+          "client_id": "510862848685-0u0g93oua205k5hqj4u2ouk5s8vlk2h0.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyBFrGDJ6fe-JlF1KN_GQYm0J7qlAsoFx-8"
+          "current_key": "AIzaSyD5AHt74hylUX3w5Q6fo7aANFtbpw1j4z8"
         }
       ],
       "services": {
         "appinvite_service": {
           "other_platform_oauth_client": [
             {
-              "client_id": "304236523340-nacm1vfcshbhh0c8e05d4gbf8iaebb1s.apps.googleusercontent.com",
+              "client_id": "510862848685-0u0g93oua205k5hqj4u2ouk5s8vlk2h0.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "510862848685-spi3uj38b7fkj0c9gm6kev67mlcjb312.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.mwaysolutions.flutterApns"
+              }
             }
           ]
         }
