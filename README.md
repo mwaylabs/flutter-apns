@@ -201,7 +201,7 @@ Setting up push notifications on iOS can be tricky since there is no way to perm
     -H "apns-topic: <bundle_identifier_of_registered_app>" \
     -H "apns-priority: 10" \
     --http2 \
-    --cert <file_path_to_downloaded_sigxwned_and_converted_certificate>.pem \
+    --cert <file_path_to_downloaded_signed_and_converted_certificate>.pem \
     https://api.development.push.apple.com/3/device/<device_token>
     ```
 24. A push notification does appear if the example app is in background.

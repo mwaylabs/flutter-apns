@@ -1,3 +1,5 @@
+### 1.5.4
+* explicitly mentioned supported platforms in pubspec.yaml
 ### 1.5.3
 * update firebase dependencies
 * Add readme: how to run example app in iOS
