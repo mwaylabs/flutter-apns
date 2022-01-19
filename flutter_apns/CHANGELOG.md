@@ -1,4 +1,4 @@
-### 1.5.2
+### 1.5.3
 * update firebase dependencies
 * Add readme: how to run example app in iOS
 ### 1.5.1
