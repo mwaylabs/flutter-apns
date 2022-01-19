@@ -1,7 +1,6 @@
 ### 1.5.2
 * update firebase dependencies
-* (#78) Do not hide push notification when opening app
-* Add readme: how to run example app
+* Add readme: how to run example app in iOS
 ### 1.5.1
 * (#58) fix unable to build android (update firebase dependencies)
 ### 1.5.0-dev.1
