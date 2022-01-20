@@ -3,15 +3,6 @@ description: APNS push notification plugin. Uses firebase_messaging on Android, 
 version: 1.5.4
 homepage: https://github.com/mwaylabs/flutter-apns
 
-flutter:
-  plugin:
-    platforms:
-      android:
-        package: com.mwaysolutions.flutterApns
-        pluginClass: FirebasePushConnector
-      ios:
-        pluginClass: ApnsPushConnector
-
 environment:
   sdk: ">=2.12.0 <3.0.0"
   flutter: ">=2.2.0"
