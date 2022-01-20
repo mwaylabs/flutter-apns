@@ -126,12 +126,12 @@ packages:
     source: path
     version: "1.5.4"
   flutter_apns_only:
-    dependency: transitive
+    dependency: "direct overridden"
     description:
-      name: flutter_apns_only
-      url: "https://pub.dartlang.org"
-    source: hosted
-    version: "1.5.2"
+      path: "../flutter_apns_only"
+      relative: true
+    source: path
+    version: "1.5.3"
   flutter_local_notifications:
     dependency: "direct main"
     description:

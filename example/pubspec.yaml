@@ -24,7 +24,7 @@ flutter:
   uses-material-design: true
 
 dependency_overrides:
-  # flutter_apns_only:
-  # path: ../flutter_apns_only
+  flutter_apns_only:
+    path: ../flutter_apns_only
   flutter_apns:
     path: ../flutter_apns

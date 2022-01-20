@@ -1,3 +1,5 @@
+## 1.5.3
+* reset unintended breaking changes
 ## 1.5.2
 
 * upgraded together with flutter_apns
