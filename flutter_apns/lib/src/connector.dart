@@ -8,7 +8,7 @@ typedef Future<void> MessageHandler(RemoteMessage message);
 abstract class PushConnector {
   /// User declined to allow for push messages.
   /// initially nil
-  ValueNotifier<bool?> get isDisabledByUser;
+  ValueNotifier<bool> get isDisabledByUser;
 
   /// Value of registered token
   /// initially nil

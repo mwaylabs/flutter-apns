@@ -33,14 +33,16 @@ class ApnsPushConnectorOnly {
   ApnsMessageHandler? _onResume;
 
   Future<bool> requestNotificationPermissions(
-      [IosNotificationSettings iosSettings = const IosNotificationSettings()]) async {
+      [IosNotificationSettings iosSettings =
+          const IosNotificationSettings()]) async {
     final bool? result = await _channel.invokeMethod<bool>(
         'requestNotificationPermissions', iosSettings.toMap());
     return result ?? false;
   }
 
   Future<ApnsAuthorizationStatus> getAuthorizationStatus() async {
-    return _authorizationStatusForString(await _channel.invokeMethod<String?>('getAuthorizationStatus', []));
+    return _authorizationStatusForString(
+        await _channel.invokeMethod<String?>('getAuthorizationStatus', []));
   }
 
   final StreamController<IosNotificationSettings> _iosSettingsStreamController =
@@ -116,7 +118,7 @@ class ApnsPushConnectorOnly {
   /// Returning true will delay onMessage callback until user actually clicks on it
   WillPresentHandler? shouldPresent;
 
-  final isDisabledByUser = ValueNotifier<bool?>(null);
+  final isDisabledByUser = ValueNotifier(false);
 
   final token = ValueNotifier<String?>(null);
 
