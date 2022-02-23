@@ -19,7 +19,9 @@ class FirebasePushConnector extends PushConnector {
     MessageHandler? onBackgroundMessage,
   }) async {
     if (!didInitialize) {
-      await Firebase.initializeApp();
+      await Firebase.initializeApp(
+        options: DefaultFirebaseOptions.currentPlatform,
+      );
       didInitialize = true;
     }
 
