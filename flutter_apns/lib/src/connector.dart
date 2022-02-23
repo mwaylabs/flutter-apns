@@ -25,6 +25,7 @@ abstract class PushConnector {
     MessageHandler? onLaunch,
     MessageHandler? onResume,
     MessageHandler? onBackgroundMessage,
+    FirebaseOptions? options,
   });
 
   /// Prompts (if need) the user to enable push notifications.
