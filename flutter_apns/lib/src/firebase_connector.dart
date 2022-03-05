@@ -17,9 +17,12 @@ class FirebasePushConnector extends PushConnector {
     MessageHandler? onLaunch,
     MessageHandler? onResume,
     MessageHandler? onBackgroundMessage,
+    FirebaseOptions? options,
   }) async {
     if (!didInitialize) {
-      await Firebase.initializeApp();
+      await Firebase.initializeApp(
+        options: options,
+      );
       didInitialize = true;
     }
 

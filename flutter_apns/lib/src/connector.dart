@@ -1,5 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/foundation.dart';
+import 'package:firebase_core/firebase_core.dart';
 
 /// Function signature for callbacks executed when push message is available;
 typedef Future<void> MessageHandler(RemoteMessage message);
@@ -25,6 +26,7 @@ abstract class PushConnector {
     MessageHandler? onLaunch,
     MessageHandler? onResume,
     MessageHandler? onBackgroundMessage,
+    FirebaseOptions? options,
   });
 
   /// Prompts (if need) the user to enable push notifications.
