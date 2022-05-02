@@ -1,13 +1,12 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter_apns_only/flutter_apns_only.dart';
 export 'package:flutter_apns_only/flutter_apns_only.dart';
-import 'package:firebase_core/firebase_core.dart';
 
 import 'connector.dart';
 
 class ApnsPushConnector extends ApnsPushConnectorOnly implements PushConnector {
   @override
-  void configure({onMessage, onLaunch, onResume, onBackgroundMessage, options}) {
+  Future<void> configure({onMessage, onLaunch, onResume, onBackgroundMessage, options}) {
     ApnsMessageHandler? mapHandler(MessageHandler? input) {
       if (input == null) {
         return null;
@@ -17,10 +16,11 @@ class ApnsPushConnector extends ApnsPushConnectorOnly implements PushConnector {
     }
 
     configureApns(
-      onMessage: mapHandler(onMessage),
-      onLaunch: mapHandler(onLaunch),
-      onResume: mapHandler(onResume),
-      onBackgroundMessage: mapHandler(onBackgroundMessage)
-    );
+        onMessage: mapHandler(onMessage),
+        onLaunch: mapHandler(onLaunch),
+        onResume: mapHandler(onResume),
+        onBackgroundMessage: mapHandler(onBackgroundMessage));
+
+    return Future<void>.value();
   }
 }

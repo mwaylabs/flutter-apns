@@ -12,7 +12,7 @@ class FirebasePushConnector extends PushConnector {
   bool didInitialize = false;
 
   @override
-  void configure({
+  Future<void> configure({
     MessageHandler? onMessage,
     MessageHandler? onLaunch,
     MessageHandler? onResume,
