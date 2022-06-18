@@ -176,7 +176,6 @@ func getFlutterError(_ error: Error) -> FlutterError {
     
     public func applicationDidBecomeActive(_ application: UIApplication) {
         resumingFromBackground = false
-        UIApplication.shared.applicationIconBadgeNumber = -1;
     }
     
     public func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
@@ -209,7 +208,7 @@ func getFlutterError(_ error: Error) -> FlutterError {
         channel.invokeMethod("willPresent", arguments: dict) { (result) in
             let shouldShow = (result as? Bool) ?? false
             if shouldShow {
-                completionHandler([.alert, .sound])
+                completionHandler([.alert, .sound, .badge])
             } else {
                 completionHandler([])
                 let userInfo = FlutterApnsSerialization.remoteMessageUserInfo(toDict: userInfo)
