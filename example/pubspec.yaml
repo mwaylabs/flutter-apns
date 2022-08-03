@@ -10,10 +10,10 @@ dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.2
-  path_provider: ^2.0.1
+  cupertino_icons: ^1.0.5
+  path_provider: ^2.0.11
 
-  flutter_local_notifications: ^5.0.0-nullsafety.1
+  flutter_local_notifications: ^9.7.0
   flutter_apns:
 
 dev_dependencies:
