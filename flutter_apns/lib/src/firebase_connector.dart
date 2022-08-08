@@ -55,7 +55,7 @@ class FirebasePushConnector extends PushConnector {
       didInitialize = true;
     }
 
-    firebase.requestPermission(
+    NotificationSettings permissions = await firebase.requestPermission(
       alert: true,
       announcement: false,
       badge: true,
@@ -64,6 +64,12 @@ class FirebasePushConnector extends PushConnector {
       provisional: false,
       sound: true,
     );
+
+    if (permissions.authorizationStatus.name == 'authorized') {
+      isDisabledByUser.value = false;
+    } else if (permissions.authorizationStatus.name == 'denied') {
+      isDisabledByUser.value = true;
+    }
   }
 
   @override
