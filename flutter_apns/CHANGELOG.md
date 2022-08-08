@@ -1,3 +1,6 @@
+### 1.6.0
+* (#97) updated dependencies
+* enhanced example app
 ### 1.5.4
 * explicitly mentioned supported platforms in pubspec.yaml
 ### 1.5.3
