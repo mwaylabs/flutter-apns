@@ -129,6 +129,9 @@ func getFlutterError(_ error: Error) -> FlutterError {
         
         var provisionalRequested = false
         if #available(iOS 12.0, *) {
+            if readBool("criticalAlert") {
+                options.append(.criticalAlert)
+            }
             if readBool("provisional") {
                 options.append(.provisional)
                 provisionalRequested = true
@@ -145,12 +148,16 @@ func getFlutterError(_ error: Error) -> FlutterError {
             }
             
             center.getNotificationSettings { (settings) in
-                let map = [
+                var map = [
                     "sound": settings.soundSetting == .enabled,
                     "badge": settings.badgeSetting == .enabled,
                     "alert": settings.alertSetting == .enabled,
                     "provisional": granted && provisionalRequested
                 ]
+
+                if #available(iOS 12.0, *) {
+                    map["criticalAlert"] = settings.criticalAlertSetting == .enabled
+                }
                 
                 self.channel.invokeMethod("onIosSettingsRegistered", arguments: map)
             }
