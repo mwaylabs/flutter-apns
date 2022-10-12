@@ -33,14 +33,16 @@ class ApnsPushConnectorOnly {
   ApnsMessageHandler? _onResume;
 
   Future<bool> requestNotificationPermissions(
-      [IosNotificationSettings iosSettings = const IosNotificationSettings()]) async {
+      [IosNotificationSettings iosSettings =
+          const IosNotificationSettings()]) async {
     final bool? result = await _channel.invokeMethod<bool>(
         'requestNotificationPermissions', iosSettings.toMap());
     return result ?? false;
   }
 
   Future<ApnsAuthorizationStatus> getAuthorizationStatus() async {
-    return _authorizationStatusForString(await _channel.invokeMethod<String?>('getAuthorizationStatus', []));
+    return _authorizationStatusForString(
+        await _channel.invokeMethod<String?>('getAuthorizationStatus', []));
   }
 
   final StreamController<IosNotificationSettings> _iosSettingsStreamController =
@@ -142,23 +144,30 @@ class ApnsPushConnectorOnly {
 }
 
 class IosNotificationSettings {
-  const IosNotificationSettings({
-    this.sound = true,
-    this.alert = true,
-    this.badge = true,
-  });
+  const IosNotificationSettings(
+      {this.sound = true,
+      this.alert = true,
+      this.badge = true,
+      this.criticalAlert = false});
 
   IosNotificationSettings._fromMap(Map<String, bool> settings)
       : sound = settings['sound'],
         alert = settings['alert'],
-        badge = settings['badge'];
+        badge = settings['badge'],
+        criticalAlert = settings['criticalAlert'];
 
   final bool? sound;
   final bool? alert;
   final bool? badge;
+  final bool? criticalAlert;
 
   Map<String, dynamic> toMap() {
-    return <String, bool?>{'sound': sound, 'alert': alert, 'badge': badge};
+    return <String, bool?>{
+      'sound': sound,
+      'alert': alert,
+      'badge': badge,
+      'criticalAlert': criticalAlert
+    };
   }
 
   @override

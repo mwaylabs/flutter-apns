@@ -112,6 +112,16 @@ If only care about apns - use flutter_apns_only plugin. It does not depend on fi
 <true/>
 ```
 
+## Critical Alert
+For use iOS Critical alert request entitlement to Apple throught this form:
+[https://developer.apple.com/contact/request/notifications-critical-alerts-entitlement/](https://developer.apple.com/contact/request/notifications-critical-alerts-entitlement/)
+
+After that assign CriticalAlert capability to your app identifier, update provisioning profiles and add this entry to app `.entitlements` file in your code:
+```
+    <key>com.apple.developer.usernotifications.critical-alerts</key>
+    <true/>
+```
+
 ## Troubleshooting
 
 1. Ensure that you are testing on actual device. NOTE: this may not be needed from 11.4: https://ohmyswift.com/blog/2020/02/13/simulating-remote-push-notifications-in-a-simulator/
