@@ -1,3 +1,6 @@
+## 1.6.1
+* resolved invoking onResume twice
+
 ## 1.6.0
 * upgraded together with flutter_apns main package
 * unify version number

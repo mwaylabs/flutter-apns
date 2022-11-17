@@ -182,19 +182,17 @@ func getFlutterError(_ error: Error) -> FlutterError {
     public func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         channel.invokeMethod("onToken", arguments: deviceToken.hexString)
     }
-    
-    
-    public func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) -> Bool {
-        let userInfo = FlutterApnsSerialization.remoteMessageUserInfo(toDict: userInfo)
-        
-        if resumingFromBackground {
-            onResume(userInfo: userInfo)
-        } else {
-            channel.invokeMethod("onMessage", arguments: userInfo)
-        }
-        
-        completionHandler(.noData)
-        return true
+
+     public func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any], fetchCompletionHandler completionHandler: @escaping (UIBackgroundFetchResult) -> Void) -> Bool {
+         let userInfo = FlutterApnsSerialization.remoteMessageUserInfo(toDict: userInfo)
+
+         if resumingFromBackground {
+         } else {
+             channel.invokeMethod("onMessage", arguments: userInfo)
+         }
+
+         completionHandler(.noData)
+         return true
     }
     
     public func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
@@ -212,8 +210,8 @@ func getFlutterError(_ error: Error) -> FlutterError {
                 completionHandler([.alert, .sound])
             } else {
                 completionHandler([])
-                let userInfo = FlutterApnsSerialization.remoteMessageUserInfo(toDict: userInfo)
-                self.channel.invokeMethod("onMessage", arguments: userInfo)
+                let dict = FlutterApnsSerialization.remoteMessageUserInfo(toDict: userInfo)
+                self.channel.invokeMethod("onMessage", arguments: dict)
             }
         }
     }
@@ -232,12 +230,8 @@ func getFlutterError(_ error: Error) -> FlutterError {
             return
         }
 
-        onResume(userInfo: dict)
+        channel.invokeMethod("onResume", arguments: dict)
         completionHandler()
-    }
-    
-    func onResume(userInfo: [AnyHashable: Any]) {
-        channel.invokeMethod("onResume", arguments: userInfo)
     }
 }
 
