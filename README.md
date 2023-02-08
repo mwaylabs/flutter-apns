@@ -1,7 +1,11 @@
 # apns
 
+⛔️ DEPRECATED ⛔️ 
+
+This package is not longer maintained.
+Please write message or GitHub issue if you want to take it over and end deprecated state.
+
 Plugin to implement APNS push notifications on iOS and Firebase on Android.
-This package is no longer maintained. Please write message if you want to take it over and end discontinued state.
 
 ## Why this plugin was made?
 
