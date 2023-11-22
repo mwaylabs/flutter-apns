@@ -1,13 +1,20 @@
+### 1.6.1
+* (#102, #31) resolved invoking onResume twice
+
 ### 1.6.0
 * (#97) updated dependencies
 * enhanced example app
+
 ### 1.5.4
 * explicitly mentioned supported platforms in pubspec.yaml
+
 ### 1.5.3
 * update firebase dependencies
 * Add readme: how to run example app in iOS
+
 ### 1.5.1
 * (#58) fix unable to build android (update firebase dependencies)
+
 ### 1.5.0-dev.1
 * (#51) Update firebase push connector to support the firebase_messaging 9.0.0. API
 * (#43) Fix onLaunch not working with closed app
